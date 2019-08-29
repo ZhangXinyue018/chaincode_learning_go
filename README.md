@@ -9,3 +9,7 @@ Run ./startLeearning.sh
 1. Edit your chaincode under `chaincode/<your_chaincode>`
 2. Edit run script using example of `startCoursera.sh` and name it as `<your_own_script>.sh`
 3. Run `./<your_own_script>.sh`
+
+
+## Test
+- Test on complex chaincode policy
