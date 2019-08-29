@@ -3,9 +3,9 @@ set -ev
 
 # This script will bring up the network, create a channel called mychannel and join all peers to the channel
 
-docker-compose -f orderer-ca-cli.yml -f peer.yml down
+docker-compose -f orderer-ca.yml -f peer.yml down
 
-docker-compose -f orderer-ca-cli.yml -f peer.yml up -d ca.example.com orderer.ordererorg.example.com cli peer0.org1.couchdb peer0.org1.example.com peer1.org1.couchdb peer1.org1.example.com peer0.org2.couchdb peer0.org2.example.com peer1.org2.couchdb peer1.org2.example.com 
+docker-compose -f orderer-ca.yml -f peer.yml up -d ca.example.com orderer.ordererorg.example.com peer0.org1.couchdb peer0.org1.example.com peer1.org1.couchdb peer1.org1.example.com peer0.org2.couchdb peer0.org2.example.com peer1.org2.couchdb peer1.org2.example.com 
 docker ps -a
 
 export FABRIC_START_TIMEOUT=10

@@ -31,6 +31,7 @@ services:
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=peer0.org1.couchdb:5984
       - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
       - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=admin
+      - FABRIC_CFG_PATH=/etc/hyperledger/fabric
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: peer node start
     ports:
@@ -41,6 +42,7 @@ services:
         - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/etc/hyperledger/msp/peer
         - ./crypto-config/peerOrganizations/org1.example.com/users:/etc/hyperledger/msp/users
         - ./config:/etc/hyperledger/configtx
+        - ./../chaincode/:/opt/gopath/src/github.com/
     depends_on:
       - orderer.ordererorg.example.com
       - peer0.org1.couchdb
@@ -74,6 +76,7 @@ services:
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=peer1.org1.couchdb:5984
       - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
       - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=admin
+      - FABRIC_CFG_PATH=/etc/hyperledger/fabric
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: peer node start
     ports:
@@ -84,6 +87,7 @@ services:
         - ./crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/msp:/etc/hyperledger/msp/peer
         - ./crypto-config/peerOrganizations/org1.example.com/users:/etc/hyperledger/msp/users
         - ./config:/etc/hyperledger/configtx
+        - ./../chaincode/:/opt/gopath/src/github.com/
     depends_on:
       - orderer.ordererorg.example.com
       - peer1.org1.couchdb
@@ -117,6 +121,7 @@ services:
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=peer0.org2.couchdb:5984
       - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
       - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=admin
+      - FABRIC_CFG_PATH=/etc/hyperledger/fabric
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: peer node start
     ports:
@@ -127,6 +132,7 @@ services:
         - ./crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp:/etc/hyperledger/msp/peer
         - ./crypto-config/peerOrganizations/org2.example.com/users:/etc/hyperledger/msp/users
         - ./config:/etc/hyperledger/configtx
+        - ./../chaincode/:/opt/gopath/src/github.com/
     depends_on:
       - orderer.ordererorg.example.com
       - peer0.org2.couchdb
@@ -160,6 +166,7 @@ services:
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=peer1.org2.couchdb:5984
       - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
       - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=admin
+      - FABRIC_CFG_PATH=/etc/hyperledger/fabric
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: peer node start
     ports:
@@ -170,6 +177,7 @@ services:
         - ./crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/msp:/etc/hyperledger/msp/peer
         - ./crypto-config/peerOrganizations/org2.example.com/users:/etc/hyperledger/msp/users
         - ./config:/etc/hyperledger/configtx
+        - ./../chaincode/:/opt/gopath/src/github.com/
     depends_on:
       - orderer.ordererorg.example.com
       - peer1.org2.couchdb
