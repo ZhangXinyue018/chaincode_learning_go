@@ -1,0 +1,15 @@
+{
+  "name": "simple",
+  "version": "1.0.0",
+  "description": "This repo is to learn NodeJS sdk for hyperledger fabric",
+  "main": "index.js",
+  "scripts": {
+    "server": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
