@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "fabric-ca-client": "^1.4.4",
+    "fabric-network": "^1.4.4"
   }
 }
