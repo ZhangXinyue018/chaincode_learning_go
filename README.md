@@ -14,3 +14,4 @@ Run ./startLeearning.sh
 ## Test
 - Test on peer log when new peer join
 - Test on complex chaincode policy
+- Test and understand leader peer

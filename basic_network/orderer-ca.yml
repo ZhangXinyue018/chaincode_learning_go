@@ -40,4 +40,20 @@ services:
         - ./crypto-config/ordererOrganizations/ordererorg.example.com/orderers/orderer.ordererorg.example.com/:/etc/hyperledger/msp/orderer
     networks:
       - basic
-    
+
+  chaincode.helper.example.com:
+    container_name: chaincode.helper.example.com
+    image: hyperledger/fabric-tools
+    tty: true
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - FABRIC_LOGGING_SPEC=info
+    working_dir: /opt/gopath/src/github.com
+    command: /bin/bash
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./../chaincode/:/opt/gopath/src/github.com/
+        - ./crypto-config/peerOrganizations/:/opt/gopath/
+    networks:
+        - basic
