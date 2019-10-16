@@ -17,6 +17,7 @@ class ContractOperator {
 
     async Init() {
         await this.Connect();
+        await this.network.addBlockListener("testListener", (err, block) => { console.log("Detect new block"); console.log(block); });
     }
 
     async EvaluateTransaction(name, ...args) {

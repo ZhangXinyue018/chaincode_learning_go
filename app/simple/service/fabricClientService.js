@@ -22,6 +22,15 @@ async function Create(message) {
     }
 }
 
+async function Conflict(message) {
+    try {
+        await simpleContractOperator.SubmitTransaction('Conflict', message);
+        console.log('Transaction of conflict has been submitted');
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 async function Get() {
     try {
         const result = await simpleContractOperator.EvaluateTransaction('Get');
@@ -35,5 +44,6 @@ async function Get() {
 module.exports = {
     Ping: Ping,
     Get: Get,
-    Create: Create
+    Create: Create,
+    Conflict: Conflict
 };

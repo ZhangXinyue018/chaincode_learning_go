@@ -25,6 +25,19 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 			return shim.Error(err.Error())
 		}
 		return shim.Success(nil)
+	case "Conflict":
+		// This is a dummy test to generate mvcc conflict
+		input := []byte(args[0])
+		err := APIstub.PutState("temp", input)
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+		result, err := APIstub.GetState("temp")
+		err = APIstub.PutState("temp", input)
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+		return shim.Success(result)
 	case "Get":
 		result, err := APIstub.GetState("temp")
 		if err != nil {

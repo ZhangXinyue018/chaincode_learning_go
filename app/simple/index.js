@@ -20,6 +20,12 @@ app.get('/ping', async (req, res) => {
     res.send(result);
 });
 
+// This is to generate mvcc read conflict
+app.get('/conflict', async (req, res) => {
+    await service.Conflict(req.query.message);
+    res.send("ok");
+});
+
 (async () => {
     await InitSimpleContractOperator();
     app.listen(3000);
