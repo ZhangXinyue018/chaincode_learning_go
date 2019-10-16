@@ -3,15 +3,13 @@ This is a learning repo for hyperledger fabric chaincode
 
 ## How to use
 ### Deploy basic network
-Run ./startLeearning.sh
+Run ./startNetwork.sh
 
 ### Deploy chaincode
 1. Edit your chaincode under `chaincode/<your_chaincode>`
-2. Edit run script using example of `startCoursera.sh` and name it as `<your_own_script>.sh`
-3. Run `./<your_own_script>.sh`
+2. Edit run script using example of `installChaincode.sh` (example is under simple chaincode)
 
-
-## Test
-- Test on peer log when new peer join
-- Test on complex chaincode policy
-- Test and understand leader peer
+### Run application
+See example [simple app](./app/simple/README.md)
+1. Prepare your certs
+2. Run app

@@ -1,2 +1,2 @@
 # Introduction
-This repo is to learn NodeJS sdk for hyperledger fabric
+This app uses NodeJS sdk to communicate with peers
