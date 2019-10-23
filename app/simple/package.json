@@ -12,6 +12,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "fabric-ca-client": "^1.4.4",
-    "fabric-network": "^1.4.4"
+    "fabric-network": "^1.4.4",
+    "swagger-ui-express": "^4.1.2"
   }
 }

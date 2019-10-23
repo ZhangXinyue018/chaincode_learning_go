@@ -3,7 +3,7 @@
 const fs = require("fs");
 const path = require('path');
 
-const { FileSystemWallet, Gateway } = require("fabric-network");
+const { FileSystemWallet, Gateway, DefaultEventHandlerStrategies } = require("fabric-network");
 const ccpPath = path.resolve(__dirname, '..', 'connection.json');
 const ccpJSON = fs.readFileSync(ccpPath, 'utf8');
 const ccp = JSON.parse(ccpJSON);
@@ -60,9 +60,20 @@ class ContractOperator {
 
         // Create a new gateway for connecting to our peer node.
         const gateway = new Gateway();
-        await gateway.connect(ccp, { wallet, identity: 'user1', discovery: { enabled: false } });
+        await gateway.connect(ccp,
+            {
+                wallet, identity: 'user1',
+                discovery: {
+                    enabled: false
+                },
+                eventHandlerOptions: {
+                    strategy: DefaultEventHandlerStrategies.MSPID_SCOPE_ALLFORTX
+                    // strategy: null
+                }
+            });
         return gateway;
     }
+
 }
 
 module.exports = ContractOperator;

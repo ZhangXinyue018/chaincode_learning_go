@@ -32,8 +32,10 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 		if err != nil {
 			return shim.Error(err.Error())
 		}
+
 		result, err := APIstub.GetState("temp")
-		err = APIstub.PutState("temp", input)
+
+		err = APIstub.PutState("temp", []byte("testconflict"))
 		if err != nil {
 			return shim.Error(err.Error())
 		}

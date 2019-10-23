@@ -4,6 +4,8 @@ const express = require("express");
 const service = require("./service/fabricClientService");
 const app = express();
 const { InitSimpleContractOperator } = require("./common");
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 
 app.get('/get', async (req, res) => {
     var result = await service.Get();
@@ -25,6 +27,8 @@ app.get('/conflict', async (req, res) => {
     await service.Conflict(req.query.message);
     res.send("ok");
 });
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 (async () => {
     await InitSimpleContractOperator();

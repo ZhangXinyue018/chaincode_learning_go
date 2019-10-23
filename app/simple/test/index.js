@@ -12,7 +12,7 @@ http.get({
     path: `/create?message=test1`,
     agent: false  // Create a new agent just for this one request
 }, (res) => {
-    console.log(`sent1`);
+    console.log(`sent1: create test1`);
     // Do stuff with response
 });
 
@@ -22,7 +22,7 @@ http.get({
     path: `/get`,
     agent: false  // Create a new agent just for this one request
 }, (res) => {
-    console.log(`sent2`);
+    console.log(`sent2: get`);
     // Do stuff with response
 });
 
@@ -32,7 +32,7 @@ http.get({
     path: `/create?message=test3`,
     agent: false  // Create a new agent just for this one request
 }, (res) => {
-    console.log(`sent3`);
+    console.log(`sent3: create test3`);
     // Do stuff with response
 });
 
@@ -42,7 +42,7 @@ http.get({
     path: `/get`,
     agent: false  // Create a new agent just for this one request
 }, (res) => {
-    console.log(`sent4`);
+    console.log(`sent4: get`);
     // Do stuff with response
 });
 
@@ -52,7 +52,7 @@ http.get({
     path: `/create?message=test5`,
     agent: false  // Create a new agent just for this one request
 }, (res) => {
-    console.log(`sent5`);
+    console.log(`sent5: create test5`);
     // Do stuff with response
 });
 
@@ -62,6 +62,6 @@ http.get({
     path: `/get`,
     agent: false  // Create a new agent just for this one request
 }, (res) => {
-    console.log(`sent6`);
+    console.log(`sent6: get`);
     // Do stuff with response
 });
