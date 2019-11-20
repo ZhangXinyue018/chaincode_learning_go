@@ -2,13 +2,15 @@ package main
 
 import (
 	"fmt"
+	"github.com/chaincode_learning_go/chaincode/coursera/common"
+	"github.com/chaincode_learning_go/chaincode/coursera/feature/school"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
 )
 
 type CourseraContract struct {
-	SchoolRepo SchoolRepo
+	SchoolRepo school.SchoolRepo
 }
 
 func (cc *CourseraContract) Init(APIstub shim.ChaincodeStubInterface) pb.Response {
@@ -28,8 +30,8 @@ func (cc *CourseraContract) Invoke(APIstub shim.ChaincodeStubInterface) pb.Respo
 
 func main() {
 	courseraContract := CourseraContract{
-		SchoolRepo: SchoolRepo{
-			Repository: Repository{Prefix: "school"},
+		SchoolRepo: school.SchoolRepo{
+			Repository: common.Repository{Prefix: "school"},
 		},
 	}
 	err := shim.Start(&courseraContract)

@@ -3,7 +3,7 @@ package course
 import (
 	"encoding/json"
 
-	"github.com/coursera/common"
+	"github.com/chaincode_learning_go/chaincode/coursera/common"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	sc "github.com/hyperledger/fabric/protos/peer"
 )
