@@ -33,8 +33,7 @@ app.get('/transfer-token', async (req, res) => {
         uuidv1(), req.query.fromUserName, req.query.toUserName,
         req.query.tokenName, req.query.tokenAmount
     );
-    var strResult = new Buffer(result).toString('ascii');
-    res.send(strResult);
+    res.send(result);
 });
 
 // This is to generate mvcc read conflict

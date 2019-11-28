@@ -19,7 +19,6 @@ type _TokenCreationRepo struct {
 
 func genTokenCreationRepo() *_TokenCreationRepo {
 	logger := shim.NewLogger("token-creation-repo")
-	logger.SetLevel(shim.LogDebug)
 	return &_TokenCreationRepo{common.BaseRepo{
 		Logger: logger,
 		IndexNames: []common.IndexName{

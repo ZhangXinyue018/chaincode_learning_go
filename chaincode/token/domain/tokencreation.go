@@ -25,11 +25,11 @@ func (token *TokenCreation) ToString() string {
 
 func (token *TokenCreation) ToMap() map[string]string {
 	return map[string]string{
-		"token_name":   token.TokenName,
+		"token_name":     token.TokenName,
 		"max_amount":     strconv.FormatInt(token.MaxAmount, 10),
 		"current_amount": strconv.FormatInt(token.CurrentAmount, 10),
-		"creator": token.Creator,
-		"issuer":  token.Issuer,
+		"creator":        token.Creator,
+		"issuer":         token.Issuer,
 	}
 }
 
@@ -45,7 +45,7 @@ type TokenCreationDataFactory struct {
 }
 
 func (factory *TokenCreationDataFactory) ToDataEntity(data []byte) (common.Data, error) {
-	if data == nil{
+	if data == nil {
 		return nil, nil
 	}
 	result := &TokenCreation{}

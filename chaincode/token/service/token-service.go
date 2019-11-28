@@ -40,7 +40,7 @@ func IssueToken(stub shim.ChaincodeStubInterface, requestId string, userName str
 }
 
 func TransferToken(stub shim.ChaincodeStubInterface, requestId, fromUserName, toUserName, tokenName string,
-	tokenAmount int64) peer.Response{
+	tokenAmount int64) peer.Response {
 	err := repo.TokenBalanceRepository.DeductBalance(stub, fromUserName, tokenName, tokenAmount)
 	if err != nil {
 		return shim.Error(err.Error())
@@ -71,7 +71,7 @@ func GetToken(stub shim.ChaincodeStubInterface, userName, tokenName string) peer
 		return shim.Error(err.Error())
 	}
 	if userBalance == nil {
-		return shim.Success([]byte("not found"))
+		userBalance = domain.GetDefaultTokenBalance(userName, tokenName)
 	}
 	result, err := userBalance.(*domain.TokenBalance).ToBytes()
 	if err != nil {

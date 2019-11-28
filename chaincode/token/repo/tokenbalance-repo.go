@@ -19,7 +19,6 @@ type _TokenBalanceRepo struct {
 
 func genTokenBalanceRepo() *_TokenBalanceRepo {
 	logger := shim.NewLogger("token-balance-repo")
-	logger.SetLevel(shim.LogDebug)
 	return &_TokenBalanceRepo{common.BaseRepo{
 		Logger: logger,
 		IndexNames: []common.IndexName{

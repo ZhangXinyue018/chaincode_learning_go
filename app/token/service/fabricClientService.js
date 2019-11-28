@@ -6,9 +6,10 @@ async function Ping() {
     try {
         const result = await simpleContractOperator.EvaluateTransaction("Ping");
         console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
-        return result.toString();
+        return result;
     } catch (err) {
         console.log(err);
+        return err;
     }
 }
 
@@ -48,6 +49,7 @@ async function TransferToken(requestId, fromUserName, toUserName, tokenName, tok
             'TransferToken', requestId, fromUserName, toUserName, tokenName, tokenAmount);
     } catch (err) {
         console.log(err);
+        return "error";
     }
 }
 
