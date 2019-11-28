@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Simple test",
+    "title": "Token test",
     "version": "2.0.0",
     "description": "This is simple test project"
   },
@@ -15,44 +15,42 @@
     "application/json"
   ],
   "paths": {
-    "/get/": {
+    "/create-token/": {
       "get": {
         "tags": [
           "test"
         ],
-        "operationId": "getTemp",
-        "summary": "get temp value",
-        "description": "get temp value",
-        "responses": {
-          "200": {
-            "description": "ok"
-          },
-          "403": {
-            "description": "access forbidden"
-          }
-        }
-      }
-    },
-    "/create/": {
-      "get": {
-        "tags": [
-          "test"
-        ],
-        "operationId": "createTemp",
-        "summary": "create temp value",
-        "description": "create temp value",
+        "operationId": "createToken",
+        "summary": "create token",
+        "description": "create token",
         "parameters": [
           {
-            "name": "key",
+            "name": "requestId",
             "in": "query",
-            "description": "value key to create",
             "required": true,
             "type": "string"
           },
           {
-            "name": "message",
+            "name": "tokenName",
             "in": "query",
-            "description": "value to create",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "maxAmount",
+            "in": "query",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "creator",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "issuer",
+            "in": "query",
             "required": true,
             "type": "string"
           }
@@ -94,7 +92,7 @@
         }
       }
     },
-    "/conflict": {
+    "/issue-token": {
       "get": {
         "tags": [
           "test"
@@ -104,9 +102,26 @@
         "operationId": "createConflict",
         "parameters": [
           {
-            "name": "message",
+            "name": "requestId",
             "in": "query",
-            "description": "value to create",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "userName",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "tokenType",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "tokenAmount",
+            "in": "query",
             "required": true,
             "type": "string"
           }

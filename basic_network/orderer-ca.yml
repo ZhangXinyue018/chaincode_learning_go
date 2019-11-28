@@ -48,12 +48,12 @@ services:
     environment:
       - GOPATH=/opt/gopath
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-      - FABRIC_LOGGING_SPEC=info
+      - FABRIC_LOGGING_SPEC=INFO
     working_dir: /opt/gopath/src/github.com
     command: /bin/bash
     volumes:
         - /var/run/:/host/var/run/
-        - ./../chaincode/:/opt/gopath/src/github.com/
+        - ./../chaincode/:/opt/gopath/src/github.com/chaincode_learning_go/chaincode/
         - ./crypto-config/peerOrganizations/:/opt/gopath/
     networks:
         - basic

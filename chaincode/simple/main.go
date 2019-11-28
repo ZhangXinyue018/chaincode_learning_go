@@ -7,6 +7,8 @@ import (
 	sc "github.com/hyperledger/fabric/protos/peer"
 )
 
+var logger = shim.NewLogger("main")
+
 type SmartContract struct {
 }
 
@@ -18,9 +20,14 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 	function, args := APIstub.GetFunctionAndParameters()
 	switch function {
 	case "Ping":
+		logger.Warning("Ping")
 		return shim.Success([]byte("Pong"))
 	case "Create":
-		err := APIstub.PutState("temp", []byte(args[0]))
+		input1 := args[0]
+		input2 := args[1]
+		key, _ := APIstub.CreateCompositeKey("temp", []string{"hello", input1})
+		logger.Warning(key)
+		err := APIstub.PutState(key, []byte(input2))
 		if err != nil {
 			return shim.Error(err.Error())
 		}
@@ -41,7 +48,10 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 		}
 		return shim.Success(result)
 	case "Get":
-		result, err := APIstub.GetState("temp")
+		input1 := args[0]
+		key, _ := APIstub.CreateCompositeKey("temp", []string{"hello", input1})
+		logger.Warning(key)
+		result, err := APIstub.GetState(key)
 		if err != nil {
 			return shim.Error(err.Error())
 		}
@@ -52,6 +62,7 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 }
 
 func main() {
+	logger.SetLevel(shim.LogInfo)
 	err := shim.Start(new(SmartContract))
 	if err != nil {
 		fmt.Printf("Error creating new Smart Contract: %s", err)
