@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/chaincode_learning_go/chaincode/token/domain"
+	"github.com/chaincode_learning_go/chaincode/token/repo"
 	"github.com/chaincode_learning_go/chaincode/token/service"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"strconv"
@@ -25,12 +26,14 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 	function, args := APIstub.GetFunctionAndParameters()
 	switch function {
 	case "Ping":
-		mainLogger.Debug("start to ping")
+		mainLogger.Info(fmt.Sprintf("level for UserTokenRepo is %v", repo.TokenBalanceRepository.Logger.IsEnabledFor(shim.LogDebug)))
+		mainLogger.Info(fmt.Sprintf("level for TokenLogRepo is %v", repo.TokenLogRepository.Logger.IsEnabledFor(shim.LogDebug)))
+		mainLogger.Info(fmt.Sprintf("level for TokenRepo is %v", repo.TokenCreationRepository.Logger.IsEnabledFor(shim.LogDebug)))
 		return service.Ping(APIstub)
 	case "CreateToken":
 		requestId := args[0]
 		maxAmount, _ := strconv.Atoi(args[2])
-		token := &domain.Token{
+		token := &domain.TokenCreation{
 			TokenName:     args[1],
 			MaxAmount:     int64(maxAmount),
 			CurrentAmount: 0,

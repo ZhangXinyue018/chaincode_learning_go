@@ -23,6 +23,7 @@ func genTokenLogRepo() *_TokenLogRepo {
 		Logger: logger,
 		IndexNames: []common.IndexName{
 			{"token", "user"}},
-		Factory: &domain.UserTokenDataFactory{},
+		Factory: &domain.TokenLogDataFactory{},
+		BaseKeyPrefix: "tokenlog",
 	}}
 }

@@ -6,24 +6,25 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
-var TokenRepository *_TokenRepo
+var TokenCreationRepository *_TokenCreationRepo
 
 func init() {
-	TokenRepository = genTokenRepo()
+	TokenCreationRepository = genTokenCreationRepo()
 }
 
-type _TokenRepo struct {
+type _TokenCreationRepo struct {
 	common.BaseRepo
 }
 
-func genTokenRepo() *_TokenRepo {
+func genTokenCreationRepo() *_TokenCreationRepo {
 	logger := shim.NewLogger("token-creation-repo")
 	logger.SetLevel(shim.LogDebug)
-	return &_TokenRepo{common.BaseRepo{
+	return &_TokenCreationRepo{common.BaseRepo{
 		Logger: logger,
 		IndexNames: []common.IndexName{
 			{"creator", "token"},
 		},
-		Factory: &domain.UserTokenDataFactory{},
+		Factory: &domain.TokenCreationDataFactory{},
+		BaseKeyPrefix: "tokencreation",
 	}}
 }

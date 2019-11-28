@@ -8,11 +8,12 @@ import (
 )
 
 func Ping(stub shim.ChaincodeStubInterface) peer.Response {
+	repo.TokenCreationRepository.Logger.Debug("hello ping")
 	return shim.Success([]byte("Pong"))
 }
 
-func CreateToken(stub shim.ChaincodeStubInterface, requestId string, token *domain.Token) peer.Response {
-	err := repo.UserTokenRepository.Create(stub, token)
+func CreateToken(stub shim.ChaincodeStubInterface, requestId string, token *domain.TokenCreation) peer.Response {
+	err := repo.TokenCreationRepository.Create(stub, token)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -20,7 +21,8 @@ func CreateToken(stub shim.ChaincodeStubInterface, requestId string, token *doma
 }
 
 func IssueToken(stub shim.ChaincodeStubInterface, requestId string, userName string, tokenType string, tokenAmount int64) peer.Response {
-	token, err := repo.TokenRepository.GetByBaseKey(stub, tokenType)
+	tokenCreationPrimaryKey := domain.GetTokenCreationPrimaryKey(tokenType)
+	token, err := repo.TokenCreationRepository.GetByPrimaryKey(stub, tokenCreationPrimaryKey)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -28,7 +30,7 @@ func IssueToken(stub shim.ChaincodeStubInterface, requestId string, userName str
 		return shim.Error("token not exist")
 	}
 
-	tokenEntity := token.(*domain.Token)
+	tokenEntity := token.(*domain.TokenCreation)
 	if tokenEntity.Issuer != userName {
 		return shim.Error("you are not allowed to issue token")
 	}
@@ -37,7 +39,7 @@ func IssueToken(stub shim.ChaincodeStubInterface, requestId string, userName str
 	}
 
 	tokenEntity.CurrentAmount = tokenEntity.CurrentAmount + tokenAmount
-	err = repo.TokenRepository.Update(stub, tokenEntity.GetBaseKey(), tokenEntity)
+	err = repo.TokenCreationRepository.Update(stub, tokenEntity.GetPrimaryKey(), tokenEntity)
 	if err != nil {
 		return shim.Error(err.Error())
 	}

@@ -34,8 +34,12 @@ func (tokenlog *TokenLog) ToMap() map[string]string {
 	}
 }
 
-func (tokenlog *TokenLog) GetBaseKey() string {
-	return fmt.Sprintf("%s:%s", "log", tokenlog.TokenLogId)
+func (tokenlog *TokenLog) GetPrimaryKey() string {
+	return GetTokenLogPrimaryKey(tokenlog.TokenLogId)
+}
+
+func GetTokenLogPrimaryKey(logId string) string {
+	return fmt.Sprintf("%s", logId)
 }
 
 type TokenLogDataFactory struct {

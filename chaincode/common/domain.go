@@ -7,7 +7,7 @@ type Data interface {
 
 	ToMap() map[string]string
 
-	GetBaseKey() string
+	GetPrimaryKey() string
 }
 
 func GenIndexKeys(data Data, indexNames []IndexName) []IndexKey {

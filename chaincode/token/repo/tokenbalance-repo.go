@@ -6,20 +6,20 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
-var UserTokenRepository *_UserTokenRepo
+var TokenBalanceRepository *_TokenBalanceRepo
 
 func init() {
-	UserTokenRepository = genUserTokenRepo()
+	TokenBalanceRepository = genTokenBalanceRepo()
 }
 
-type _UserTokenRepo struct {
+type _TokenBalanceRepo struct {
 	common.BaseRepo
 }
 
-func genUserTokenRepo() *_UserTokenRepo {
+func genTokenBalanceRepo() *_TokenBalanceRepo {
 	logger := shim.NewLogger("user-token-repo")
 	logger.SetLevel(shim.LogDebug)
-	return &_UserTokenRepo{common.BaseRepo{
+	return &_TokenBalanceRepo{common.BaseRepo{
 		Logger: logger,
 		IndexNames: []common.IndexName{
 			{"fromuser", "touser"},
@@ -27,6 +27,7 @@ func genUserTokenRepo() *_UserTokenRepo {
 			{"touser", "fromuser"},
 			{"touser", "token"},
 		},
-		Factory: &domain.UserTokenDataFactory{},
+		Factory: &domain.TokenBalanceDataFactory{},
+		BaseKeyPrefix: "tokenbalance",
 	}}
 }

@@ -7,21 +7,21 @@ import (
 	"strconv"
 )
 
-type UserToken struct {
+type TokenBalance struct {
 	UserName    string `json:"user_name"`
 	TokenName   string `json:"token_name"`
 	TokenAmount int64  `json:"token_amount"`
 }
 
-func (userToken *UserToken) ToBytes() ([]byte, error) {
+func (userToken *TokenBalance) ToBytes() ([]byte, error) {
 	return lib.ToJsonBytes(userToken)
 }
 
-func (userToken *UserToken) ToString() string {
+func (userToken *TokenBalance) ToString() string {
 	return lib.ToJsonString(userToken)
 }
 
-func (userToken *UserToken) ToMap() map[string]string {
+func (userToken *TokenBalance) ToMap() map[string]string {
 	return map[string]string{
 		"user":   userToken.UserName,
 		"token":  userToken.TokenName,
@@ -29,15 +29,19 @@ func (userToken *UserToken) ToMap() map[string]string {
 	}
 }
 
-func (userToken *UserToken) GetBaseKey() string {
-	return fmt.Sprintf("%s:%s:%s", "token", userToken.UserName, userToken.TokenName)
+func (userToken *TokenBalance) GetPrimaryKey() string {
+	return GetTokenBalancePrimaryKey(userToken.UserName, userToken.TokenName)
 }
 
-type UserTokenDataFactory struct {
+func GetTokenBalancePrimaryKey(userName, tokenName string) string {
+	return fmt.Sprintf("%s:%s", userName, tokenName)
 }
 
-func (factory *UserTokenDataFactory) ToDataEntity(data []byte) (common.Data, error) {
-	result := &UserToken{}
+type TokenBalanceDataFactory struct {
+}
+
+func (factory *TokenBalanceDataFactory) ToDataEntity(data []byte) (common.Data, error) {
+	result := &TokenBalance{}
 	err := lib.FromJsonBytes(data, result)
 	if err != nil {
 		return nil, err

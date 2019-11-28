@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-type Token struct {
+type TokenCreation struct {
 	TokenName     string    `json:"token_name"`
 	MaxAmount     int64     `json:"max_amount"`
 	CurrentAmount int64     `json:"current_amount"`
@@ -17,15 +17,15 @@ type Token struct {
 	CreatedTime   time.Time `json:"created_time"`
 }
 
-func (token *Token) ToBytes() ([]byte, error) {
+func (token *TokenCreation) ToBytes() ([]byte, error) {
 	return lib.ToJsonBytes(token)
 }
 
-func (token *Token) ToString() string {
+func (token *TokenCreation) ToString() string {
 	return lib.ToJsonString(token)
 }
 
-func (token *Token) ToMap() map[string]string {
+func (token *TokenCreation) ToMap() map[string]string {
 	return map[string]string{
 		"token":   token.TokenName,
 		"max":     strconv.FormatInt(token.MaxAmount, 10),
@@ -35,15 +35,19 @@ func (token *Token) ToMap() map[string]string {
 	}
 }
 
-func (token *Token) GetBaseKey() string {
-	return fmt.Sprintf("%s:%s", "creation", token.TokenName)
+func (token *TokenCreation) GetPrimaryKey() string {
+	return GetTokenCreationPrimaryKey(token.TokenName)
 }
 
-type TokenDataFactory struct {
+func GetTokenCreationPrimaryKey(tokenName string) string {
+	return fmt.Sprintf("%s", tokenName)
 }
 
-func (factory *TokenDataFactory) ToDataEntity(data []byte) (common.Data, error) {
-	result := &Token{}
+type TokenCreationDataFactory struct {
+}
+
+func (factory *TokenCreationDataFactory) ToDataEntity(data []byte) (common.Data, error) {
+	result := &TokenCreation{}
 	err := lib.FromJsonBytes(data, result)
 	if err != nil {
 		return nil, err

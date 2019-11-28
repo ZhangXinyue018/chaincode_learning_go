@@ -1,3 +1,4 @@
 mychannel.block
 node_modules/
 .idea
+chaincode/token/token
