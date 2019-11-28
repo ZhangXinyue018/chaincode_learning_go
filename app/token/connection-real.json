@@ -18,7 +18,10 @@
                 "orderer.ordererorg.example.com"
             ],
             "peers": {
-                "peer0.org1.example.com": {}
+                "peer0.org1.example.com": {},
+                "peer1.org1.example.com": {},
+                "peer0.org2.example.com": {},
+                "peer1.org2.example.com": {}
             }
         }
     },
@@ -26,7 +29,18 @@
         "Org1": {
             "mspid": "Org1",
             "peers": [
-                "peer0.org1.example.com"
+                "peer0.org1.example.com",
+                "peer1.org1.example.com"
+            ],
+            "certificateAuthorities": [
+                "ca.example.com"
+            ]
+        },
+        "Org2": {
+            "mspid": "Org2",
+            "peers": [
+                "peer0.org2.example.com",
+                "peer1.org2.example.com"
             ],
             "certificateAuthorities": [
                 "ca.example.com"
@@ -41,6 +55,15 @@
     "peers": {
         "peer0.org1.example.com": {
             "url": "grpc://localhost:17051"
+        },
+        "peer1.org1.example.com": {
+            "url": "grpc://localhost:27051"
+        },
+        "peer0.org2.example.com": {
+            "url": "grpc://localhost:37051"
+        },
+        "peer1.org2.example.com": {
+            "url": "grpc://localhost:47051"
         }
     },
     "certificateAuthorities": {

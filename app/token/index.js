@@ -6,11 +6,11 @@ const app = express();
 const {InitSimpleContractOperator} = require("./common");
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
-
+const uuidv1 = require('uuid/v1');
 
 app.get('/create-token', async (req, res) => {
     await service.CreateToken(
-        req.query.requestId, req.query.tokenName, req.query.maxAmount,
+        uuidv1(), req.query.tokenName, req.query.maxAmount,
         req.query.creator, req.query.issuer);
     res.send("ok");
 });
@@ -20,10 +20,27 @@ app.get('/ping', async (req, res) => {
     res.send(result);
 });
 
+app.get('/get-token', async (req, res) => {
+    var result = await service.GetToken(
+        uuidv1(), req.query.userName, req.query.tokenName
+    );
+    var strResult = new Buffer(result).toString('ascii');
+    res.send(strResult);
+});
+
+app.get('/transfer-token', async (req, res) => {
+    var result = await service.TransferToken(
+        uuidv1(), req.query.fromUserName, req.query.toUserName,
+        req.query.tokenName, req.query.tokenAmount
+    );
+    var strResult = new Buffer(result).toString('ascii');
+    res.send(strResult);
+});
+
 // This is to generate mvcc read conflict
 app.get('/issue-token', async (req, res) => {
     await service.IssueToken(
-        req.query.requestId, req.query.userName, req.query.tokenType,
+        uuidv1(), req.query.userName, req.query.tokenName,
         req.query.tokenAmount);
     res.send("ok");
 });

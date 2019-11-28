@@ -25,12 +25,6 @@
         "description": "create token",
         "parameters": [
           {
-            "name": "requestId",
-            "in": "query",
-            "required": true,
-            "type": "string"
-          },
-          {
             "name": "tokenName",
             "in": "query",
             "required": true,
@@ -78,7 +72,6 @@
             "name": "key",
             "in": "query",
             "description": "value key to create",
-            "required": true,
             "type": "string"
           }
         ],
@@ -102,19 +95,13 @@
         "operationId": "createConflict",
         "parameters": [
           {
-            "name": "requestId",
-            "in": "query",
-            "required": true,
-            "type": "string"
-          },
-          {
             "name": "userName",
             "in": "query",
             "required": true,
             "type": "string"
           },
           {
-            "name": "tokenType",
+            "name": "tokenName",
             "in": "query",
             "required": true,
             "type": "string"
@@ -124,6 +111,72 @@
             "in": "query",
             "required": true,
             "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ok"
+          }
+        }
+      }
+    },
+    "/get-token": {
+      "get": {
+        "tags": [
+          "test"
+        ],
+        "operationId": "getToken",
+        "parameters": [
+          {
+            "name": "userName",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "tokenName",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ok"
+          }
+        }
+      }
+    },
+    "/transfer-token": {
+      "get": {
+        "tags": [
+          "test"
+        ],
+        "operationId": "transferToken",
+        "parameters": [
+          {
+            "name": "fromUserName",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "toUserName",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "tokenName",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "tokenAmount",
+            "in": "query",
+            "required": true,
+            "type": "integer"
           }
         ],
         "responses": {

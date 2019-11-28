@@ -33,11 +33,25 @@ func (repo *BaseRepo) GetByPrimaryKey(stub shim.ChaincodeStubInterface, primaryK
 		repo.Logger.Error(err.Error())
 		return nil, err
 	}
-	repo.Logger.Debugf("Get entity %v for key %s", result, baseKey)
 	return result, nil
 }
 
-func (repo *BaseRepo) Update(stub shim.ChaincodeStubInterface, primaryKey string, entity Data) error {
+func (repo *BaseRepo) UpdateWithEntity(stub shim.ChaincodeStubInterface, originalEntity Data, entity Data) error {
+	repo.Logger.Debugf("Update entity: %v", entity)
+	baseKey := repo.getBaseKeyByEntity(entity)
+	err := repo.update(stub, baseKey, entity)
+	if err != nil {
+		repo.Logger.Error(err.Error())
+		return err
+	}
+
+	originalIndexKeys := GenIndexKeys(originalEntity, repo.IndexNames)
+	newIndexKeys := GenIndexKeys(entity, repo.IndexNames)
+
+	return repo.updateIndexes(stub, originalIndexKeys, newIndexKeys, baseKey)
+}
+
+func (repo *BaseRepo) UpdateWithPrimaryKey(stub shim.ChaincodeStubInterface, primaryKey string, entity Data) error {
 	baseKey := repo.getBaseKeyByPrimaryKey(primaryKey)
 	repo.Logger.Debugf("Start updating entity for key: %s", baseKey)
 
@@ -51,16 +65,7 @@ func (repo *BaseRepo) Update(stub shim.ChaincodeStubInterface, primaryKey string
 		return nil
 	}
 
-	err = repo.update(stub, baseKey, entity)
-	if err != nil {
-		repo.Logger.Error(err.Error())
-		return err
-	}
-
-	originalIndexKeys := GenIndexKeys(originalEntity, repo.IndexNames)
-	newIndexKeys := GenIndexKeys(entity, repo.IndexNames)
-
-	return repo.updateIndexes(stub, originalIndexKeys, newIndexKeys, baseKey)
+	return repo.UpdateWithEntity(stub, originalEntity, entity)
 }
 
 func (repo *BaseRepo) Delete(stub shim.ChaincodeStubInterface, primaryKey string) (Data, error) {

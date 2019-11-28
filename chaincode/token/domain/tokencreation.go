@@ -5,7 +5,6 @@ import (
 	"github.com/chaincode_learning_go/chaincode/common"
 	"github.com/chaincode_learning_go/chaincode/lib"
 	"strconv"
-	"time"
 )
 
 type TokenCreation struct {
@@ -14,7 +13,6 @@ type TokenCreation struct {
 	CurrentAmount int64     `json:"current_amount"`
 	Creator       string    `json:"creator"`
 	Issuer        string    `json:"issuer"`
-	CreatedTime   time.Time `json:"created_time"`
 }
 
 func (token *TokenCreation) ToBytes() ([]byte, error) {
@@ -27,9 +25,9 @@ func (token *TokenCreation) ToString() string {
 
 func (token *TokenCreation) ToMap() map[string]string {
 	return map[string]string{
-		"token":   token.TokenName,
-		"max":     strconv.FormatInt(token.MaxAmount, 10),
-		"current": strconv.FormatInt(token.CurrentAmount, 10),
+		"token_name":   token.TokenName,
+		"max_amount":     strconv.FormatInt(token.MaxAmount, 10),
+		"current_amount": strconv.FormatInt(token.CurrentAmount, 10),
 		"creator": token.Creator,
 		"issuer":  token.Issuer,
 	}
@@ -47,6 +45,9 @@ type TokenCreationDataFactory struct {
 }
 
 func (factory *TokenCreationDataFactory) ToDataEntity(data []byte) (common.Data, error) {
+	if data == nil{
+		return nil, nil
+	}
 	result := &TokenCreation{}
 	err := lib.FromJsonBytes(data, result)
 	if err != nil {

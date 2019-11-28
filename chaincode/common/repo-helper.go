@@ -110,7 +110,7 @@ func (repo *BaseRepo) getIndexKeyPrefix() string {
 }
 
 func (repo *BaseRepo) getBaseKeyByPrimaryKey(key string) string {
-	return fmt.Sprintf("%s:%s:", repo.BaseKeyPrefix, key)
+	return fmt.Sprintf("%s:%s", repo.BaseKeyPrefix, key)
 }
 
 func (repo *BaseRepo) getBaseKeyByEntity(entity Data) string {

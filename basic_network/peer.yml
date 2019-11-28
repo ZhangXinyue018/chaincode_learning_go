@@ -35,7 +35,7 @@ services:
       - FABRIC_CFG_PATH=/etc/hyperledger/fabric
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
-    command: peer node start --peer-chaincodedev=true
+    command: peer node start
     ports:
       - 17051:7051
       - 17052:7052
@@ -83,7 +83,7 @@ services:
       - FABRIC_CFG_PATH=/etc/hyperledger/fabric
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
-    command: peer node start --peer-chaincodedev=true
+    command: peer node start
     ports:
       - 27051:7051
       - 27052:7052
@@ -131,7 +131,7 @@ services:
       - FABRIC_CFG_PATH=/etc/hyperledger/fabric
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
-    command: peer node start --peer-chaincodedev=true
+    command: peer node start
     ports:
       - 37051:7051
       - 37052:7052
@@ -179,7 +179,7 @@ services:
       - FABRIC_CFG_PATH=/etc/hyperledger/fabric
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
-    command: peer node start --peer-chaincodedev=true
+    command: peer node start
     ports:
       - 47051:7051
       - 47052:7052

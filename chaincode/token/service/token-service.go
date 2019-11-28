@@ -20,39 +20,18 @@ func CreateToken(stub shim.ChaincodeStubInterface, requestId string, token *doma
 	return shim.Success([]byte("ok"))
 }
 
-func IssueToken(stub shim.ChaincodeStubInterface, requestId string, userName string, tokenType string, tokenAmount int64) peer.Response {
-	tokenCreationPrimaryKey := domain.GetTokenCreationPrimaryKey(tokenType)
-	token, err := repo.TokenCreationRepository.GetByPrimaryKey(stub, tokenCreationPrimaryKey)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-	if token == nil {
-		return shim.Error("token not exist")
-	}
-
-	tokenEntity := token.(*domain.TokenCreation)
-	if tokenEntity.Issuer != userName {
-		return shim.Error("you are not allowed to issue token")
-	}
-	if tokenEntity.CurrentAmount+tokenAmount > tokenEntity.MaxAmount {
-		return shim.Error("amount exceed")
-	}
-
-	tokenEntity.CurrentAmount = tokenEntity.CurrentAmount + tokenAmount
-	err = repo.TokenCreationRepository.Update(stub, tokenEntity.GetPrimaryKey(), tokenEntity)
+func IssueToken(stub shim.ChaincodeStubInterface, requestId string, userName string, tokenName string, tokenAmount int64) peer.Response {
+	err := repo.TokenCreationRepository.UpdateTokenIssueAmount(stub, userName, tokenName, tokenAmount)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
 
-	tokenLog := &domain.TokenLog{
-		TokenLogId:   requestId,
-		FromUserName: "0",
-		ToUserName:   tokenEntity.Issuer,
-		TokenName:    tokenEntity.TokenName,
-		TokenAmount:  tokenAmount,
-		Comment:      "issue token",
+	err = repo.TokenBalanceRepository.AddBalance(stub, userName, tokenName, tokenAmount)
+	if err != nil {
+		return shim.Error(err.Error())
 	}
-	err = repo.TokenLogRepository.Create(stub, tokenLog)
+
+	err = repo.TokenLogRepository.CreateTokenLog(stub, requestId, userName, tokenName, tokenAmount)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -60,24 +39,43 @@ func IssueToken(stub shim.ChaincodeStubInterface, requestId string, userName str
 	return shim.Success([]byte("ok"))
 }
 
-//func TransferToken(stub shim.ChaincodeStubInterface, requestId string,) {
-//	tokenLog := &domain.TokenLog{
-//		TokenLogId:   requestId,
-//		FromUserName: "0",
-//		ToUserName:   tokenEntity.Issuer,
-//		TokenName:    tokenEntity.TokenName,
-//		TokenAmount:  tokenAmount,
-//		Comment:      "issue token",
-//	}
-//	err = repo.TokenLogRepository.Create(stub, tokenLog)
-//	if err != nil {
-//		return shim.Error(err.Error())
-//	}
-//
-//	return shim.Success([]byte("ok"))
-//
-//}
-//
-//func GetToken(stub shim.ChaincodeStubInterface) {
-//
-//}
+func TransferToken(stub shim.ChaincodeStubInterface, requestId, fromUserName, toUserName, tokenName string,
+	tokenAmount int64) peer.Response{
+	err := repo.TokenBalanceRepository.DeductBalance(stub, fromUserName, tokenName, tokenAmount)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	err = repo.TokenBalanceRepository.AddBalance(stub, toUserName, tokenName, tokenAmount)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	err = repo.TokenLogRepository.CreateTokenLog(stub, requestId, fromUserName, tokenName, -tokenAmount)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	err = repo.TokenLogRepository.CreateTokenLog(stub, requestId, toUserName, tokenName, tokenAmount)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	return shim.Success([]byte("ok"))
+}
+
+func GetToken(stub shim.ChaincodeStubInterface, userName, tokenName string) peer.Response {
+	userBalancePrimaryKey := domain.GetTokenBalancePrimaryKey(userName, tokenName)
+	userBalance, err := repo.TokenBalanceRepository.GetByPrimaryKey(stub, userBalancePrimaryKey)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	if userBalance == nil {
+		return shim.Success([]byte("not found"))
+	}
+	result, err := userBalance.(*domain.TokenBalance).ToBytes()
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	return shim.Success(result)
+}

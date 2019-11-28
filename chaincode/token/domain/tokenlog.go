@@ -26,10 +26,11 @@ func (tokenlog *TokenLog) ToString() string {
 
 func (tokenlog *TokenLog) ToMap() map[string]string {
 	return map[string]string{
-		"fromuser": tokenlog.FromUserName,
-		"touser":   tokenlog.ToUserName,
-		"token":    tokenlog.TokenName,
-		"amount":   strconv.FormatInt(tokenlog.TokenAmount, 10),
+		"token_log_id": tokenlog.TokenLogId,
+		"from_user_name": tokenlog.FromUserName,
+		"to_user_name":   tokenlog.ToUserName,
+		"token_name":    tokenlog.TokenName,
+		"token_amount":   strconv.FormatInt(tokenlog.TokenAmount, 10),
 		"comment":  tokenlog.Comment,
 	}
 }
@@ -46,6 +47,9 @@ type TokenLogDataFactory struct {
 }
 
 func (factory *TokenLogDataFactory) ToDataEntity(data []byte) (common.Data, error) {
+	if data == nil{
+		return nil, nil
+	}
 	result := &TokenLog{}
 	err := lib.FromJsonBytes(data, result)
 	if err != nil {

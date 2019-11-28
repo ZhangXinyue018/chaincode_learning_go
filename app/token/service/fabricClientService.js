@@ -23,11 +23,29 @@ async function CreateToken(requestId, tokenName, maxAmount, creator, issuer) {
     }
 }
 
-async function IssueToken(requestId, userName, tokenType, tokenAmount) {
+async function IssueToken(requestId, userName, tokenName, tokenAmount) {
     try {
         await simpleContractOperator.SubmitTransaction(
-            'IssueToken', requestId, userName, tokenType, tokenAmount);
-        console.log('Transaction of conflict has been submitted');
+            'IssueToken', requestId, userName, tokenName, tokenAmount);
+        console.log('Transaction of issuetoken has been submitted');
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function GetToken(requestId, userName, tokenName) {
+    try {
+        return await simpleContractOperator.SubmitTransaction(
+            'GetToken', requestId, userName, tokenName);
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function TransferToken(requestId, fromUserName, toUserName, tokenName, tokenAmount) {
+    try {
+        return await simpleContractOperator.SubmitTransaction(
+            'TransferToken', requestId, fromUserName, toUserName, tokenName, tokenAmount);
     } catch (err) {
         console.log(err);
     }
@@ -36,5 +54,7 @@ async function IssueToken(requestId, userName, tokenType, tokenAmount) {
 module.exports = {
     Ping: Ping,
     CreateToken: CreateToken,
-    IssueToken: IssueToken
+    IssueToken: IssueToken,
+    GetToken: GetToken,
+    TransferToken: TransferToken
 };
