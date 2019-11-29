@@ -21,7 +21,7 @@ func genTokenCreationRepo() *_TokenCreationRepo {
 	logger := shim.NewLogger("token-creation-repo")
 	return &_TokenCreationRepo{common.BaseRepo{
 		Logger: logger,
-		IndexNames: common.IndexNamePackage{
+		IndexNamePackage: common.IndexNamePackage{
 			{Indicator: "ByCreator", Names: []string{"creator", "token_name"}},
 		},
 		Factory:       &domain.TokenCreationDataFactory{},

@@ -21,7 +21,7 @@ func genTokenBalanceRepo() *_TokenBalanceRepo {
 	logger := shim.NewLogger("token-balance-repo")
 	return &_TokenBalanceRepo{common.BaseRepo{
 		Logger: logger,
-		IndexNames: common.IndexNamePackage{
+		IndexNamePackage: common.IndexNamePackage{
 			{Indicator: "ByToken", Names: []string{"token_name", "user_name"}},
 			{Indicator: "ByUser", Names: []string{"user_name", "token_name"}},
 		},

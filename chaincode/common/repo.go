@@ -5,10 +5,10 @@ import (
 )
 
 type BaseRepo struct {
-	Logger        *shim.ChaincodeLogger
-	IndexNames    []IndexName
-	Factory       DataFactory
-	BaseKeyPrefix string
+	Logger           *shim.ChaincodeLogger
+	IndexNamePackage IndexNamePackage
+	Factory          DataFactory
+	BaseKeyPrefix    string
 }
 
 func (repo *BaseRepo) Create(stub shim.ChaincodeStubInterface, entity Data) error {
@@ -20,7 +20,7 @@ func (repo *BaseRepo) Create(stub shim.ChaincodeStubInterface, entity Data) erro
 		repo.Logger.Error(err.Error())
 		return err
 	}
-	indexKeys := GenIndexKeys(entity, repo.IndexNames)
+	indexKeys := GenIndexKeys(entity, repo.IndexNamePackage)
 	repo.Logger.Debugf("Start creating index Keys : %v", indexKeys)
 	return repo.addIndexes(stub, indexKeys, baseKey)
 }
@@ -64,8 +64,8 @@ func (repo *BaseRepo) UpdateWithEntity(stub shim.ChaincodeStubInterface, origina
 		return err
 	}
 
-	originalIndexKeys := GenIndexKeys(originalEntity, repo.IndexNames)
-	newIndexKeys := GenIndexKeys(entity, repo.IndexNames)
+	originalIndexKeys := GenIndexKeys(originalEntity, repo.IndexNamePackage)
+	newIndexKeys := GenIndexKeys(entity, repo.IndexNamePackage)
 
 	return repo.updateIndexes(stub, originalIndexKeys, newIndexKeys, baseKey)
 }
@@ -109,7 +109,7 @@ func (repo *BaseRepo) Delete(stub shim.ChaincodeStubInterface, primaryKey string
 	}
 
 	// delete index
-	indexKeys := GenIndexKeys(entity, repo.IndexNames)
+	indexKeys := GenIndexKeys(entity, repo.IndexNamePackage)
 	err = repo.removeIndexes(stub, indexKeys)
 	if err != nil {
 		repo.Logger.Error(err.Error())

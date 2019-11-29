@@ -20,7 +20,7 @@ func genTokenLogRepo() *_TokenLogRepo {
 	logger := shim.NewLogger("token-log-repo")
 	return &_TokenLogRepo{common.BaseRepo{
 		Logger: logger,
-		IndexNames: common.IndexNamePackage{
+		IndexNamePackage: common.IndexNamePackage{
 			{Indicator: "ByFromUserAndToUser", Names: []string{"from_user_name", "to_user_name", "token_name", "token_log_id"}},
 			{Indicator: "ByFromUserAndToken", Names: []string{"from_user_name", "token_name", "to_user_name", "token_log_id"}},
 			{Indicator: "ByToUserAndFromUser", Names: []string{"to_user_name", "from_user_name", "token_name", "token_log_id"}},
