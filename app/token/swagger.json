@@ -185,6 +185,42 @@
           }
         }
       }
+    },
+    "/pagination-token": {
+      "get": {
+        "tags": [
+          "test"
+        ],
+        "operationId": "paginateToken",
+        "parameters": [
+          {
+            "name": "userName",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "tokenName",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "bookMark",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ok"
+          }
+        }
+      }
     }
   }
 }

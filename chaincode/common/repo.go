@@ -36,6 +36,25 @@ func (repo *BaseRepo) GetByPrimaryKey(stub shim.ChaincodeStubInterface, primaryK
 	return result, nil
 }
 
+func (repo *BaseRepo) ListByIndexKey(stub shim.ChaincodeStubInterface, indexKey IndexSearchKey) ([]Data, error) {
+	repo.Logger.Debugf("Start listing entities for indexKey %v", indexKey)
+	return repo.listByIndexKey(stub, indexKey)
+}
+
+func (repo *BaseRepo) PaginateByIndexKey(stub shim.ChaincodeStubInterface, indexKey IndexSearchKey,
+	pageSize int32, bookMark string) (*PaginationResponse, error) {
+	repo.Logger.Debugf("Start pagination with bookMark %s", bookMark)
+	resultList, resultBookMark, err := repo.listByIndexKeyPagination(stub, indexKey, pageSize, bookMark)
+	if err != nil {
+		return nil, err
+	}
+	return &PaginationResponse{
+		PageSize: pageSize,
+		BookMark: resultBookMark,
+		Results:  resultList,
+	}, nil
+}
+
 func (repo *BaseRepo) UpdateWithEntity(stub shim.ChaincodeStubInterface, originalEntity Data, entity Data) error {
 	repo.Logger.Debugf("Update entity: %v", entity)
 	baseKey := repo.getBaseKeyByEntity(entity)

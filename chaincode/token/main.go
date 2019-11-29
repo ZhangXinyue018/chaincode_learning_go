@@ -57,6 +57,18 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 		tokenName := args[3]
 		tokenAmount, _ := strconv.Atoi(args[4])
 		return service.TransferToken(APIstub, requestId, fromUserName, toUserName, tokenName, int64(tokenAmount))
+	case "PaginateTokenBalanceByUser":
+		//requestId := args[0]
+		userName := args[1]
+		pageSize, _ := strconv.Atoi(args[2])
+		bookMark := args[3]
+		return service.PaginateTokenByUserName(APIstub, []string{userName}, int32(pageSize), bookMark)
+	case "PaginateTokenBalanceByToken":
+		//requestId := args[0]
+		tokenName := args[1]
+		pageSize, _ := strconv.Atoi(args[2])
+		bookMark := args[3]
+		return service.PaginateTokenByTokenName(APIstub, []string{tokenName}, int32(pageSize), bookMark)
 	}
 
 	return shim.Error("Invalid Smart Contract function name.")

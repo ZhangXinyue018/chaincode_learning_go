@@ -20,11 +20,11 @@ func genTokenLogRepo() *_TokenLogRepo {
 	logger := shim.NewLogger("token-log-repo")
 	return &_TokenLogRepo{common.BaseRepo{
 		Logger: logger,
-		IndexNames: []common.IndexName{
-			{"from_user_name", "to_user_name", "token_name", "token_log_id"},
-			{"from_user_name", "token_name", "to_user_name", "token_log_id"},
-			{"to_user_name", "from_user_name", "token_name", "token_log_id"},
-			{"to_user_name", "token_name", "from_user_name", "token_log_id"},
+		IndexNames: common.IndexNamePackage{
+			{Indicator: "ByFromUserAndToUser", Names: []string{"from_user_name", "to_user_name", "token_name", "token_log_id"}},
+			{Indicator: "ByFromUserAndToken", Names: []string{"from_user_name", "token_name", "to_user_name", "token_log_id"}},
+			{Indicator: "ByToUserAndFromUser", Names: []string{"to_user_name", "from_user_name", "token_name", "token_log_id"}},
+			{Indicator: "ByToUserAndToken", Names: []string{"to_user_name", "token_name", "from_user_name", "token_log_id"}},
 		},
 		Factory:       &domain.TokenLogDataFactory{},
 		BaseKeyPrefix: "tokenlog",

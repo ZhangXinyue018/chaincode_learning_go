@@ -28,6 +28,23 @@ app.get('/get-token', async (req, res) => {
     res.send(strResult);
 });
 
+app.get('/pagination-token', async (req, res) => {
+    let result;
+    if (req.query.userName) {
+        result = await service.PaginateTokenBalanceByUser(
+            uuidv1(), req.query.userName, req.query.pageSize,
+            req.query.bookMark ? req.query.bookMark : ""
+        );
+    } else {
+        result = await service.PaginateTokenBalanceByToken(
+            uuidv1(), req.query.tokenName, req.query.pageSize,
+            req.query.bookMark ? req.query.bookMark : ""
+        )
+    }
+    let strResult = new Buffer(result).toString('ascii');
+    res.send(strResult);
+});
+
 app.get('/transfer-token', async (req, res) => {
     var result = await service.TransferToken(
         uuidv1(), req.query.fromUserName, req.query.toUserName,

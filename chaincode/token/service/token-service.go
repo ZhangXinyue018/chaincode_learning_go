@@ -65,17 +65,31 @@ func TransferToken(stub shim.ChaincodeStubInterface, requestId, fromUserName, to
 }
 
 func GetToken(stub shim.ChaincodeStubInterface, userName, tokenName string) peer.Response {
-	userBalancePrimaryKey := domain.GetTokenBalancePrimaryKey(userName, tokenName)
-	userBalance, err := repo.TokenBalanceRepository.GetByPrimaryKey(stub, userBalancePrimaryKey)
+	userBalance, err := repo.TokenBalanceRepository.GetBalance(stub, userName, tokenName)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	if userBalance == nil {
-		userBalance = domain.GetDefaultTokenBalance(userName, tokenName)
-	}
-	result, err := userBalance.(*domain.TokenBalance).ToBytes()
+	result, err := userBalance.ToBytes()
 	if err != nil {
 		return shim.Error(err.Error())
 	}
 	return shim.Success(result)
+}
+
+func PaginateTokenByUserName(stub shim.ChaincodeStubInterface, query []string, pageSize int32,
+	bookMark string) peer.Response {
+	result, err := repo.TokenBalanceRepository.PaginateBalanceByUserName(stub, query, pageSize, bookMark)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	return shim.Success(result.ToBytes())
+}
+
+func PaginateTokenByTokenName(stub shim.ChaincodeStubInterface, query []string, pageSize int32,
+	bookMark string) peer.Response {
+	result, err := repo.TokenBalanceRepository.PaginateBalanceByTokenName(stub, query, pageSize, bookMark)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	return shim.Success(result.ToBytes())
 }

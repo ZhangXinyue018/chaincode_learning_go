@@ -100,6 +100,61 @@ func (repo *BaseRepo) get(stub shim.ChaincodeStubInterface, key string) (Data, e
 	return repo.Factory.ToDataEntity(entityBytes)
 }
 
+func (repo *BaseRepo) listByIndexKey(stub shim.ChaincodeStubInterface, indexSearchKey IndexSearchKey) ([]Data, error) {
+	iterator, err := stub.GetStateByPartialCompositeKey(repo.getIndexKeyPrefix(), indexSearchKey.ToSearchKeyList())
+	defer iterator.Close()
+	if err != nil {
+		return nil, err
+	}
+	baseKeys := make([]string, 0)
+	for i := 0; iterator.HasNext(); i++ {
+		response, err := iterator.Next()
+		if err != nil {
+			return nil, err
+		}
+
+		baseKeys = append(baseKeys, string(response.Value))
+	}
+	resultList := make([]Data, 0)
+	for _, baseKey := range baseKeys {
+		result, err := repo.get(stub, baseKey)
+		if err != nil {
+			return nil, err
+		}
+		resultList = append(resultList, result)
+	}
+	return resultList, nil
+}
+
+func (repo *BaseRepo) listByIndexKeyPagination(stub shim.ChaincodeStubInterface, indexSearchKey IndexSearchKey,
+	pageSize int32, bookMark string) ([]Data, string, error) {
+	iterator, responseMeta, err := stub.GetStateByPartialCompositeKeyWithPagination(repo.getIndexKeyPrefix(),
+		indexSearchKey.ToSearchKeyList(), pageSize, bookMark)
+	defer iterator.Close()
+	if err != nil {
+		return nil, "", err
+	}
+	baseKeys := make([]string, 0)
+	for i := 0; iterator.HasNext(); i++ {
+		response, err := iterator.Next()
+		if err != nil {
+			return nil, "", err
+		}
+
+		baseKeys = append(baseKeys, string(response.Value))
+	}
+	resultList := make([]Data, 0)
+	for _, baseKey := range baseKeys {
+		result, err := repo.get(stub, baseKey)
+		if err != nil {
+			return nil, "", err
+		}
+		repo.Logger.Debugf("append %s", result.ToString())
+		resultList = append(resultList, result)
+	}
+	return resultList, responseMeta.Bookmark, nil
+}
+
 func (repo *BaseRepo) delete(stub shim.ChaincodeStubInterface, key string) error {
 	repo.Logger.Debugf("Start deleting entity for key: %s", key)
 	return stub.DelState(key)
