@@ -1,4 +1,4 @@
-package repo
+package impl
 
 import (
 	"errors"
@@ -7,17 +7,11 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
-var TokenCreationRepository *_TokenCreationRepo
-
-func init() {
-	TokenCreationRepository = genTokenCreationRepo()
-}
-
 type _TokenCreationRepo struct {
 	common.BaseRepo
 }
 
-func genTokenCreationRepo() *_TokenCreationRepo {
+func GenTokenCreationRepo() *_TokenCreationRepo {
 	logger := shim.NewLogger("token-creation-repo")
 	return &_TokenCreationRepo{common.BaseRepo{
 		Logger: logger,
@@ -27,6 +21,22 @@ func genTokenCreationRepo() *_TokenCreationRepo {
 		Factory:       &domain.TokenCreationDataFactory{},
 		BaseKeyPrefix: "tokencreation",
 	}}
+}
+
+func (repo *_TokenCreationRepo) CreateToken(stub shim.ChaincodeStubInterface, tokenName string, maxAmount int64,
+	creator, issuer string) error {
+	tokenCreation := &domain.TokenCreation{
+		TokenName:     tokenName,
+		MaxAmount:     maxAmount,
+		CurrentAmount: 0,
+		Creator:       creator,
+		Issuer:        issuer,
+	}
+	err := repo.Create(stub, tokenCreation)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (repo *_TokenCreationRepo) UpdateTokenIssueAmount(stub shim.ChaincodeStubInterface, userName, tokenName string,

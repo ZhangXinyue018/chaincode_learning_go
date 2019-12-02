@@ -1,4 +1,4 @@
-package repo
+package impl
 
 import (
 	"github.com/chaincode_learning_go/chaincode/common"
@@ -6,17 +6,11 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
-var TokenLogRepository *_TokenLogRepo
-
-func init() {
-	TokenLogRepository = genTokenLogRepo()
-}
-
 type _TokenLogRepo struct {
 	common.BaseRepo
 }
 
-func genTokenLogRepo() *_TokenLogRepo {
+func GenTokenLogRepo() *_TokenLogRepo {
 	logger := shim.NewLogger("token-log-repo")
 	return &_TokenLogRepo{common.BaseRepo{
 		Logger: logger,

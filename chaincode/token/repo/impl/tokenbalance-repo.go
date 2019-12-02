@@ -1,4 +1,4 @@
-package repo
+package impl
 
 import (
 	"errors"
@@ -7,17 +7,11 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
-var TokenBalanceRepository *_TokenBalanceRepo
-
-func init() {
-	TokenBalanceRepository = genTokenBalanceRepo()
-}
-
 type _TokenBalanceRepo struct {
 	common.BaseRepo
 }
 
-func genTokenBalanceRepo() *_TokenBalanceRepo {
+func GenTokenBalanceRepo() *_TokenBalanceRepo {
 	logger := shim.NewLogger("token-balance-repo")
 	return &_TokenBalanceRepo{common.BaseRepo{
 		Logger: logger,
