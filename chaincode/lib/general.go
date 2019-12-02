@@ -1,6 +1,8 @@
 package lib
 
-import "encoding/json"
+import (
+	"encoding/json"
+)
 
 func ToJsonBytes(entity interface{}) ([]byte, error) {
 	return json.Marshal(entity)

@@ -1,9 +1,11 @@
 package impl
 
 import (
+	"github.com/chaincode_learning_go/chaincode/token/consts"
+	"github.com/chaincode_learning_go/chaincode/token/domain/protos"
+	"github.com/chaincode_learning_go/chaincode/token/domain/resp"
 	"github.com/chaincode_learning_go/chaincode/token/repo/iterf"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
-	"github.com/hyperledger/fabric/protos/peer"
 )
 
 type TokenService struct {
@@ -12,88 +14,153 @@ type TokenService struct {
 	TokenBalanceRepository  iterf.ITokenBalanceRepository
 }
 
-func (service *TokenService) Ping(stub shim.ChaincodeStubInterface) peer.Response {
-	return shim.Success([]byte("Pong"))
+func (service *TokenService) Ping(stub shim.ChaincodeStubInterface, request *protos.PingRequest) *protos.PingResponse {
+	return &protos.PingResponse{CommonResponse: resp.BuildSuccessCommonResponse(consts.RESPONSE_SUCCESS)}
 }
 
-func (service *TokenService) CreateToken(stub shim.ChaincodeStubInterface, tokenName string, maxAmount int64, creator, issuer string) peer.Response {
-	err := service.TokenCreationRepository.CreateToken(stub, tokenName, maxAmount, creator, issuer)
+func (service *TokenService) CreateToken(stub shim.ChaincodeStubInterface, request *protos.CreateTokenRequest) *protos.CreateTokenResponse {
+
+	err := service.TokenCreationRepository.CreateToken(stub, request.TokenName, request.MaxAmount, request.Creator, request.Issuer)
+
 	if err != nil {
-		return shim.Error(err.Error())
+		return &protos.CreateTokenResponse{
+			CommonResponse: resp.BuildErrorCommonResponse(consts.RESPONSE_FAILURE, consts.GENERAL_ERROR_CODE, err.Error()),
+		}
 	}
-	return shim.Success([]byte("ok"))
+
+	return &protos.CreateTokenResponse{CommonResponse: resp.BuildSuccessCommonResponse(consts.RESPONSE_SUCCESS)}
 }
 
-func (service *TokenService) IssueToken(stub shim.ChaincodeStubInterface, requestId string, userName string, tokenName string, tokenAmount int64) peer.Response {
+func (service *TokenService) IssueToken(stub shim.ChaincodeStubInterface, request *protos.IssueTokenRequest) *protos.IssueTokenResponse {
+	requestId := request.CommonRequest.RequestId
+	userName := request.UserName
+	tokenName := request.TokenName
+	tokenAmount := request.TokenAmount
 	err := service.TokenCreationRepository.UpdateTokenIssueAmount(stub, userName, tokenName, tokenAmount)
+
 	if err != nil {
-		return shim.Error(err.Error())
+		return &protos.IssueTokenResponse{
+			CommonResponse: resp.BuildErrorCommonResponse(consts.RESPONSE_FAILURE, consts.GENERAL_ERROR_CODE, err.Error()),
+		}
 	}
 
 	err = service.TokenBalanceRepository.AddBalance(stub, userName, tokenName, tokenAmount)
+
 	if err != nil {
-		return shim.Error(err.Error())
+		return &protos.IssueTokenResponse{
+			CommonResponse: resp.BuildErrorCommonResponse(consts.RESPONSE_FAILURE, consts.GENERAL_ERROR_CODE, err.Error()),
+		}
 	}
 
 	err = service.TokenLogRepository.CreateTokenLog(stub, requestId, userName, tokenName, tokenAmount)
+
 	if err != nil {
-		return shim.Error(err.Error())
+		return &protos.IssueTokenResponse{
+			CommonResponse: resp.BuildErrorCommonResponse(consts.RESPONSE_FAILURE, consts.GENERAL_ERROR_CODE, err.Error()),
+		}
 	}
 
-	return shim.Success([]byte("ok"))
+	return &protos.IssueTokenResponse{CommonResponse: resp.BuildSuccessCommonResponse(consts.RESPONSE_SUCCESS)}
 }
 
-func (service *TokenService) TransferToken(stub shim.ChaincodeStubInterface, requestId, fromUserName, toUserName, tokenName string,
-	tokenAmount int64) peer.Response {
+func (service *TokenService) TransferToken(stub shim.ChaincodeStubInterface, request *protos.TransferTokenRequest) *protos.TransferTokenResponse {
+	requestId := request.CommonRequest.RequestId
+	fromUserName := request.FromUserName
+	toUserName := request.ToUserName
+	tokenName := request.TokenName
+	tokenAmount := request.TokenAmount
+
 	err := service.TokenBalanceRepository.DeductBalance(stub, fromUserName, tokenName, tokenAmount)
+
 	if err != nil {
-		return shim.Error(err.Error())
+		return &protos.TransferTokenResponse{
+			CommonResponse: resp.BuildErrorCommonResponse(consts.RESPONSE_FAILURE, consts.GENERAL_ERROR_CODE, err.Error()),
+		}
 	}
 
 	err = service.TokenBalanceRepository.AddBalance(stub, toUserName, tokenName, tokenAmount)
+
 	if err != nil {
-		return shim.Error(err.Error())
+		return &protos.TransferTokenResponse{
+			CommonResponse: resp.BuildErrorCommonResponse(consts.RESPONSE_FAILURE, consts.GENERAL_ERROR_CODE, err.Error()),
+		}
 	}
 
 	err = service.TokenLogRepository.CreateTokenLog(stub, requestId, fromUserName, tokenName, -tokenAmount)
+
 	if err != nil {
-		return shim.Error(err.Error())
+		return &protos.TransferTokenResponse{
+			CommonResponse: resp.BuildErrorCommonResponse(consts.RESPONSE_FAILURE, consts.GENERAL_ERROR_CODE, err.Error()),
+		}
 	}
 
 	err = service.TokenLogRepository.CreateTokenLog(stub, requestId, toUserName, tokenName, tokenAmount)
+
 	if err != nil {
-		return shim.Error(err.Error())
+		return &protos.TransferTokenResponse{
+			CommonResponse: resp.BuildErrorCommonResponse(consts.RESPONSE_FAILURE, consts.GENERAL_ERROR_CODE, err.Error()),
+		}
 	}
 
-	return shim.Success([]byte("ok"))
+	return &protos.TransferTokenResponse{CommonResponse: resp.BuildSuccessCommonResponse(consts.RESPONSE_SUCCESS)}
 }
 
-func (service *TokenService) GetToken(stub shim.ChaincodeStubInterface, userName, tokenName string) peer.Response {
-	userBalance, err := service.TokenBalanceRepository.GetBalance(stub, userName, tokenName)
+func (service *TokenService) GetToken(stub shim.ChaincodeStubInterface, request *protos.GetTokenRequest) *protos.GetTokenResponse {
+
+	userBalance, err := service.TokenBalanceRepository.GetBalance(stub, request.UserName, request.TokenName)
+
 	if err != nil {
-		return shim.Error(err.Error())
+		return &protos.GetTokenResponse{
+			CommonResponse: resp.BuildErrorCommonResponse(consts.RESPONSE_FAILURE, consts.GENERAL_ERROR_CODE, err.Error()),
+		}
 	}
-	result, err := userBalance.ToBytes()
-	if err != nil {
-		return shim.Error(err.Error())
+
+	return &protos.GetTokenResponse{
+		CommonResponse: resp.BuildSuccessCommonResponse(consts.RESPONSE_SUCCESS),
+		Result:         userBalance,
 	}
-	return shim.Success(result)
 }
 
-func (service *TokenService) PaginateTokenByUserName(stub shim.ChaincodeStubInterface, query []string, pageSize int32,
-	bookMark string) peer.Response {
-	result, err := service.TokenBalanceRepository.PaginateBalanceByUserName(stub, query, pageSize, bookMark)
+func (service *TokenService) PaginateTokenByUserName(stub shim.ChaincodeStubInterface,
+	request *protos.PaginateTokenByUserNameRequest) *protos.PaginateTokenByUserNameResponse {
+	query := []string{request.UserName}
+	pageSize := request.PageSize
+	bookMark := request.BookMark
+
+	results, newBookMark, err := service.TokenBalanceRepository.PaginateBalanceByUserName(stub, query, pageSize, bookMark)
+
 	if err != nil {
-		return shim.Error(err.Error())
+		return &protos.PaginateTokenByUserNameResponse{
+			CommonResponse: resp.BuildErrorCommonResponse(consts.RESPONSE_FAILURE, consts.GENERAL_ERROR_CODE, err.Error()),
+		}
 	}
-	return shim.Success(result.ToBytes())
+
+	return &protos.PaginateTokenByUserNameResponse{
+		CommonResponse: resp.BuildSuccessCommonResponse(consts.RESPONSE_SUCCESS),
+		PageSize:       pageSize,
+		Results:        results,
+		BookMark:       newBookMark,
+	}
 }
 
-func (service *TokenService) PaginateTokenByTokenName(stub shim.ChaincodeStubInterface, query []string, pageSize int32,
-	bookMark string) peer.Response {
-	result, err := service.TokenBalanceRepository.PaginateBalanceByTokenName(stub, query, pageSize, bookMark)
+func (service *TokenService) PaginateTokenByTokenName(stub shim.ChaincodeStubInterface,
+	request *protos.PaginateTokenByTokenNameRequest) *protos.PaginateTokenByTokenNameResponse {
+	query := []string{request.TokenName}
+	pageSize := request.PageSize
+	bookMark := request.BookMark
+
+	results, newBookMark, err := service.TokenBalanceRepository.PaginateBalanceByTokenName(stub, query, pageSize, bookMark)
+
 	if err != nil {
-		return shim.Error(err.Error())
+		return &protos.PaginateTokenByTokenNameResponse{
+			CommonResponse: resp.BuildErrorCommonResponse(consts.RESPONSE_FAILURE, consts.GENERAL_ERROR_CODE, err.Error()),
+		}
 	}
-	return shim.Success(result.ToBytes())
+
+	return &protos.PaginateTokenByTokenNameResponse{
+		CommonResponse: resp.BuildSuccessCommonResponse(consts.RESPONSE_SUCCESS),
+		PageSize:       pageSize,
+		Results:        results,
+		BookMark:       newBookMark,
+	}
 }

@@ -1,11 +1,7 @@
 package common
 
-import (
-	"github.com/chaincode_learning_go/chaincode/lib"
-)
-
 type Data interface {
-	ToBytes() ([]byte, error)
+	ToStoreBytes() ([]byte, error)
 
 	ToString() string
 
@@ -28,7 +24,7 @@ func GenIndexKeys(data Data, indexNamePackage IndexNamePackage) IndexKeyPackage 
 }
 
 type DataFactory interface {
-	ToDataEntity([]byte) (Data, error)
+	ToDataEntityFromStoredBytes([]byte) (Data, error)
 }
 
 type IndexIndicator string
@@ -52,20 +48,5 @@ type IndexSearchKey struct {
 func (indexSearchKey *IndexSearchKey) ToSearchKeyList() IndexKey {
 	result := IndexKey{string(indexSearchKey.Indicator + ":")}
 	result = append(result, indexSearchKey.Keys...)
-	return result
-}
-
-type PaginationResponse struct {
-	PageSize int32  `json:"page_size"`
-	BookMark string `json:"book_mark"`
-	Results  []Data `json:"results"`
-}
-
-// TODO: test on this
-func (paginationResponse *PaginationResponse) ToBytes() []byte {
-	result, err := lib.ToJsonBytes(paginationResponse)
-	if err != nil {
-		return []byte("{}")
-	}
 	return result
 }

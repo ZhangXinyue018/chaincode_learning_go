@@ -1,26 +1,22 @@
 package iterf
 
 import (
+	"github.com/chaincode_learning_go/chaincode/token/domain/protos"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
-	"github.com/hyperledger/fabric/protos/peer"
 )
 
 type ITokenService interface {
-	Ping(stub shim.ChaincodeStubInterface) peer.Response
+	Ping(stub shim.ChaincodeStubInterface, request *protos.PingRequest) *protos.PingResponse
 
-	CreateToken(stub shim.ChaincodeStubInterface, tokenName string, maxAmount int64,
-		creator, issuer string) peer.Response
+	CreateToken(stub shim.ChaincodeStubInterface, request *protos.CreateTokenRequest) *protos.CreateTokenResponse
 
-	IssueToken(stub shim.ChaincodeStubInterface, requestId, userName, tokenName string, tokenAmount int64) peer.Response
+	IssueToken(stub shim.ChaincodeStubInterface, request *protos.IssueTokenRequest) *protos.IssueTokenResponse
 
-	TransferToken(stub shim.ChaincodeStubInterface, requestId, fromUserName, toUserName, tokenName string,
-		tokenAmount int64) peer.Response
+	TransferToken(stub shim.ChaincodeStubInterface, request *protos.TransferTokenRequest) *protos.TransferTokenResponse
 
-	GetToken(stub shim.ChaincodeStubInterface, userName, tokenName string) peer.Response
+	GetToken(stub shim.ChaincodeStubInterface, request *protos.GetTokenRequest) *protos.GetTokenResponse
 
-	PaginateTokenByUserName(stub shim.ChaincodeStubInterface, query []string, pageSize int32,
-		bookMark string) peer.Response
+	PaginateTokenByUserName(stub shim.ChaincodeStubInterface, request *protos.PaginateTokenByUserNameRequest) *protos.PaginateTokenByUserNameResponse
 
-	PaginateTokenByTokenName(stub shim.ChaincodeStubInterface, query []string, pageSize int32,
-		bookMark string) peer.Response
+	PaginateTokenByTokenName(stub shim.ChaincodeStubInterface, request *protos.PaginateTokenByTokenNameRequest) *protos.PaginateTokenByTokenNameResponse
 }

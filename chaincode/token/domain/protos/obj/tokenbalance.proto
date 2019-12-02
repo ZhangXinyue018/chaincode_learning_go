@@ -1,0 +1,8 @@
+syntax = "proto3";
+package protos;
+
+message TokenBalancePB {
+    string UserName = 1;
+    string TokenName = 2;
+    int64 TokenAmount = 3;
+}

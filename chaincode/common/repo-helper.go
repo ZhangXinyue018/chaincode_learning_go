@@ -10,7 +10,7 @@ const (
 )
 
 func (repo *BaseRepo) create(stub shim.ChaincodeStubInterface, key string, entity Data) error {
-	entityBytes, err := entity.ToBytes()
+	entityBytes, err := entity.ToStoreBytes()
 	if err != nil {
 		return err
 	}
@@ -97,7 +97,7 @@ func (repo *BaseRepo) get(stub shim.ChaincodeStubInterface, key string) (Data, e
 		return nil, err
 	}
 
-	return repo.Factory.ToDataEntity(entityBytes)
+	return repo.Factory.ToDataEntityFromStoredBytes(entityBytes)
 }
 
 func (repo *BaseRepo) listByIndexKey(stub shim.ChaincodeStubInterface, indexSearchKey IndexSearchKey) ([]Data, error) {

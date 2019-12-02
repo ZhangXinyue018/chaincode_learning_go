@@ -1,0 +1,11 @@
+syntax = "proto3";
+package protos;
+
+message TokenLogPB {
+    string TokenLogId = 1;
+    string FromUserName = 2;
+    string ToUserName = 3;
+    string TokenName = 4;
+    int64 TokenAmount = 5;
+    string Comment = 6;
+}

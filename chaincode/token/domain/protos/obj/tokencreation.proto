@@ -1,0 +1,10 @@
+syntax = "proto3";
+package protos;
+
+message TokenCreationPB {
+    string TokenName = 1;
+    int64 MaxAmount = 2;
+    int64 CurrentAmount = 3;
+    string Creator = 4;
+    string Issuer = 5;
+}

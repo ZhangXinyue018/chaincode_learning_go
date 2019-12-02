@@ -2,11 +2,13 @@ package main
 
 import (
 	"fmt"
+	"github.com/chaincode_learning_go/chaincode/token/domain/protos"
+	"github.com/chaincode_learning_go/chaincode/token/domain/resp"
 	_ "github.com/chaincode_learning_go/chaincode/token/repo"
 	"github.com/chaincode_learning_go/chaincode/token/service"
+	"github.com/golang/protobuf/proto"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	sc "github.com/hyperledger/fabric/protos/peer"
-	"strconv"
 )
 
 var mainLogger = shim.NewLogger("main")
@@ -20,50 +22,68 @@ func (s *SmartContract) Init(APIstub shim.ChaincodeStubInterface) sc.Response {
 
 func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response {
 	function, args := APIstub.GetFunctionAndParameters()
+	requestBytes := []byte(args[0])
 	switch function {
 	case "Ping":
 		mainLogger.Debugf("ping")
-		return service.TokenService.Ping(APIstub)
+		request := &protos.PingRequest{}
+		err := proto.Unmarshal(requestBytes, request)
+		if err != nil {
+			return shim.Error("non known")
+		}
+		response := service.TokenService.Ping(APIstub, request)
+		return shim.Success(resp.ToResponseBytes(response))
 	case "CreateToken":
-		//requestId := args[0]
-		maxAmount, _ := strconv.Atoi(args[2])
-		tokenName := args[1]
-		creator := args[3]
-		issuer := args[4]
-		return service.TokenService.CreateToken(APIstub, tokenName, int64(maxAmount), creator, issuer)
+		request := &protos.CreateTokenRequest{}
+		err := proto.Unmarshal(requestBytes, request)
+		if err != nil {
+			return shim.Error("non known")
+		}
+		response := service.TokenService.CreateToken(APIstub, request)
+		return shim.Success(resp.ToResponseBytes(response))
 	case "IssueToken":
-		requestId := args[0]
-		userName := args[1]
-		tokenName := args[2]
-		tokenAmount, _ := strconv.Atoi(args[3])
-		return service.TokenService.IssueToken(APIstub, requestId, userName, tokenName, int64(tokenAmount))
+		request := &protos.IssueTokenRequest{}
+		err := proto.Unmarshal(requestBytes, request)
+		if err != nil {
+			return shim.Error("non known")
+		}
+		response := service.TokenService.IssueToken(APIstub, request)
+		return shim.Success(resp.ToResponseBytes(response))
 	case "GetToken":
-		//requestId := args[0]
-		userName := args[1]
-		tokenName := args[2]
-		return service.TokenService.GetToken(APIstub, userName, tokenName)
+		request := &protos.GetTokenRequest{}
+		err := proto.Unmarshal(requestBytes, request)
+		if err != nil {
+			return shim.Error("non known")
+		}
+		response := service.TokenService.GetToken(APIstub, request)
+		return shim.Success(resp.ToResponseBytes(response))
 	case "TransferToken":
-		requestId := args[0]
-		fromUserName := args[1]
-		toUserName := args[2]
-		tokenName := args[3]
-		tokenAmount, _ := strconv.Atoi(args[4])
-		return service.TokenService.TransferToken(APIstub, requestId, fromUserName, toUserName, tokenName, int64(tokenAmount))
+		request := &protos.TransferTokenRequest{}
+		err := proto.Unmarshal(requestBytes, request)
+		if err != nil {
+			return shim.Error("non known")
+		}
+		response := service.TokenService.TransferToken(APIstub, request)
+		return shim.Success(resp.ToResponseBytes(response))
 	case "PaginateTokenBalanceByUser":
-		//requestId := args[0]
-		userName := args[1]
-		pageSize, _ := strconv.Atoi(args[2])
-		bookMark := args[3]
-		return service.TokenService.PaginateTokenByUserName(APIstub, []string{userName}, int32(pageSize), bookMark)
+		request := &protos.PaginateTokenByUserNameRequest{}
+		err := proto.Unmarshal(requestBytes, request)
+		if err != nil {
+			return shim.Error("non known")
+		}
+		response := service.TokenService.PaginateTokenByUserName(APIstub, request)
+		return shim.Success(resp.ToResponseBytes(response))
 	case "PaginateTokenBalanceByToken":
-		//requestId := args[0]
-		tokenName := args[1]
-		pageSize, _ := strconv.Atoi(args[2])
-		bookMark := args[3]
-		return service.TokenService.PaginateTokenByTokenName(APIstub, []string{tokenName}, int32(pageSize), bookMark)
+		request := &protos.PaginateTokenByTokenNameRequest{}
+		err := proto.Unmarshal(requestBytes, request)
+		if err != nil {
+			return shim.Error("non known")
+		}
+		response := service.TokenService.PaginateTokenByTokenName(APIstub, request)
+		return shim.Success(resp.ToResponseBytes(response))
 	}
 
-	return shim.Error("Invalid Smart Contract function name.")
+	return shim.Error("not supported")
 }
 
 func main() {

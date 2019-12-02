@@ -1,21 +1,16 @@
-package domain
+package obj
 
 import (
 	"fmt"
 	"github.com/chaincode_learning_go/chaincode/common"
 	"github.com/chaincode_learning_go/chaincode/lib"
+	"github.com/chaincode_learning_go/chaincode/token/domain/protos/obj"
 	"strconv"
 )
 
-type TokenCreation struct {
-	TokenName     string    `json:"token_name"`
-	MaxAmount     int64     `json:"max_amount"`
-	CurrentAmount int64     `json:"current_amount"`
-	Creator       string    `json:"creator"`
-	Issuer        string    `json:"issuer"`
-}
+type TokenCreation protos.TokenCreationPB
 
-func (token *TokenCreation) ToBytes() ([]byte, error) {
+func (token *TokenCreation) ToStoreBytes() ([]byte, error) {
 	return lib.ToJsonBytes(token)
 }
 
@@ -44,7 +39,7 @@ func GetTokenCreationPrimaryKey(tokenName string) string {
 type TokenCreationDataFactory struct {
 }
 
-func (factory *TokenCreationDataFactory) ToDataEntity(data []byte) (common.Data, error) {
+func (factory *TokenCreationDataFactory) ToDataEntityFromStoredBytes(data []byte) (common.Data, error) {
 	if data == nil {
 		return nil, nil
 	}

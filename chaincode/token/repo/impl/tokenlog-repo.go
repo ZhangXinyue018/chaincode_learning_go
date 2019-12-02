@@ -2,7 +2,7 @@ package impl
 
 import (
 	"github.com/chaincode_learning_go/chaincode/common"
-	"github.com/chaincode_learning_go/chaincode/token/domain"
+	"github.com/chaincode_learning_go/chaincode/token/domain/obj"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
@@ -20,13 +20,13 @@ func GenTokenLogRepo() *_TokenLogRepo {
 			{Indicator: "ByToUserAndFromUser", Names: []string{"to_user_name", "from_user_name", "token_name", "token_log_id"}},
 			{Indicator: "ByToUserAndToken", Names: []string{"to_user_name", "token_name", "from_user_name", "token_log_id"}},
 		},
-		Factory:       &domain.TokenLogDataFactory{},
+		Factory:       &obj.TokenLogDataFactory{},
 		BaseKeyPrefix: "tokenlog",
 	}}
 }
 
 func (repo *_TokenLogRepo) CreateTokenLog(stub shim.ChaincodeStubInterface, requestId, userName, tokenName string, tokenAmount int64) error {
-	tokenLog := &domain.TokenLog{
+	tokenLog := &obj.TokenLog{
 		TokenLogId:   requestId,
 		FromUserName: "0",
 		ToUserName:   userName,

@@ -42,17 +42,13 @@ func (repo *BaseRepo) ListByIndexKey(stub shim.ChaincodeStubInterface, indexKey 
 }
 
 func (repo *BaseRepo) PaginateByIndexKey(stub shim.ChaincodeStubInterface, indexKey IndexSearchKey,
-	pageSize int32, bookMark string) (*PaginationResponse, error) {
+	pageSize int32, bookMark string) ([]Data, string, error) {
 	repo.Logger.Debugf("Start pagination with bookMark %s", bookMark)
 	resultList, resultBookMark, err := repo.listByIndexKeyPagination(stub, indexKey, pageSize, bookMark)
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
-	return &PaginationResponse{
-		PageSize: pageSize,
-		BookMark: resultBookMark,
-		Results:  resultList,
-	}, nil
+	return resultList, resultBookMark, nil
 }
 
 func (repo *BaseRepo) UpdateWithEntity(stub shim.ChaincodeStubInterface, originalEntity Data, entity Data) error {

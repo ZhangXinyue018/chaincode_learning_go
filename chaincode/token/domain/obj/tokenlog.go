@@ -1,22 +1,16 @@
-package domain
+package obj
 
 import (
 	"fmt"
 	"github.com/chaincode_learning_go/chaincode/common"
 	"github.com/chaincode_learning_go/chaincode/lib"
+	"github.com/chaincode_learning_go/chaincode/token/domain/protos/obj"
 	"strconv"
 )
 
-type TokenLog struct {
-	TokenLogId   string `json:"token_log_id"`
-	FromUserName string `json:"from_user_name"`
-	ToUserName   string `json:"to_user_name"`
-	TokenName    string `json:"token_name"`
-	TokenAmount  int64  `json:"token_amount"`
-	Comment      string `json:"comment"`
-}
+type TokenLog protos.TokenLogPB
 
-func (tokenlog *TokenLog) ToBytes() ([]byte, error) {
+func (tokenlog *TokenLog) ToStoreBytes() ([]byte, error) {
 	return lib.ToJsonBytes(tokenlog)
 }
 
@@ -26,12 +20,12 @@ func (tokenlog *TokenLog) ToString() string {
 
 func (tokenlog *TokenLog) ToMap() map[string]string {
 	return map[string]string{
-		"token_log_id": tokenlog.TokenLogId,
+		"token_log_id":   tokenlog.TokenLogId,
 		"from_user_name": tokenlog.FromUserName,
 		"to_user_name":   tokenlog.ToUserName,
-		"token_name":    tokenlog.TokenName,
+		"token_name":     tokenlog.TokenName,
 		"token_amount":   strconv.FormatInt(tokenlog.TokenAmount, 10),
-		"comment":  tokenlog.Comment,
+		"comment":        tokenlog.Comment,
 	}
 }
 
@@ -46,8 +40,8 @@ func GetTokenLogPrimaryKey(logId string) string {
 type TokenLogDataFactory struct {
 }
 
-func (factory *TokenLogDataFactory) ToDataEntity(data []byte) (common.Data, error) {
-	if data == nil{
+func (factory *TokenLogDataFactory) ToDataEntityFromStoredBytes(data []byte) (common.Data, error) {
+	if data == nil {
 		return nil, nil
 	}
 	result := &TokenLog{}

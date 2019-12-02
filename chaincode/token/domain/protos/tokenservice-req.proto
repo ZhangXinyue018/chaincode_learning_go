@@ -1,0 +1,51 @@
+syntax = "proto3";
+package protos;
+
+import "common.proto";
+
+message PingRequest {
+    CommonRequest CommonRequest = 1;
+}
+
+message CreateTokenRequest {
+    CommonRequest CommonRequest = 1;
+    string TokenName = 2;
+    int64 MaxAmount = 3;
+    string Creator = 4;
+    string Issuer = 5;
+}
+
+message IssueTokenRequest {
+    CommonRequest CommonRequest = 1;
+    string UserName = 2;
+    string TokenName = 3;
+    int64 TokenAmount = 4;
+}
+
+message TransferTokenRequest {
+    CommonRequest CommonRequest = 1;
+    string FromUserName = 2;
+    string ToUserName = 3;
+    string TokenName = 4;
+    int64 TokenAmount = 5;
+}
+
+message GetTokenRequest {
+    CommonRequest CommonRequest = 1;
+    string UserName = 2;
+    string TokenName = 3;
+}
+
+message PaginateTokenByUserNameRequest {
+    CommonRequest CommonRequest = 1;
+    string UserName = 2;
+    int32 PageSize = 3;
+    string BookMark = 4;
+}
+
+message PaginateTokenByTokenNameRequest {
+    CommonRequest CommonRequest = 1;
+    string TokenName = 2;
+    int32 PageSize = 3;
+    string BookMark = 4;
+}

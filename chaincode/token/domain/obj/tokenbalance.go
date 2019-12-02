@@ -1,19 +1,16 @@
-package domain
+package obj
 
 import (
 	"fmt"
 	"github.com/chaincode_learning_go/chaincode/common"
 	"github.com/chaincode_learning_go/chaincode/lib"
+	protos "github.com/chaincode_learning_go/chaincode/token/domain/protos/obj"
 	"strconv"
 )
 
-type TokenBalance struct {
-	UserName    string `json:"user_name"`
-	TokenName   string `json:"token_name"`
-	TokenAmount int64  `json:"token_amount"`
-}
+type TokenBalance protos.TokenBalancePB
 
-func (userToken *TokenBalance) ToBytes() ([]byte, error) {
+func (userToken *TokenBalance) ToStoreBytes() ([]byte, error) {
 	return lib.ToJsonBytes(userToken)
 }
 
@@ -23,8 +20,8 @@ func (userToken *TokenBalance) ToString() string {
 
 func (userToken *TokenBalance) ToMap() map[string]string {
 	return map[string]string{
-		"user_name":   userToken.UserName,
-		"token_name":  userToken.TokenName,
+		"user_name":    userToken.UserName,
+		"token_name":   userToken.TokenName,
 		"token_amount": strconv.FormatInt(userToken.TokenAmount, 10),
 	}
 }
@@ -52,7 +49,7 @@ func GetDefaultTokenBalance(userName, tokenName string) *TokenBalance {
 type TokenBalanceDataFactory struct {
 }
 
-func (factory *TokenBalanceDataFactory) ToDataEntity(data []byte) (common.Data, error) {
+func (factory *TokenBalanceDataFactory) ToDataEntityFromStoredBytes(data []byte) (common.Data, error) {
 	if data == nil {
 		return nil, nil
 	}

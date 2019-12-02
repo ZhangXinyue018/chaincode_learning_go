@@ -3,7 +3,7 @@ package impl
 import (
 	"errors"
 	"github.com/chaincode_learning_go/chaincode/common"
-	"github.com/chaincode_learning_go/chaincode/token/domain"
+	"github.com/chaincode_learning_go/chaincode/token/domain/obj"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
@@ -18,14 +18,14 @@ func GenTokenCreationRepo() *_TokenCreationRepo {
 		IndexNamePackage: common.IndexNamePackage{
 			{Indicator: "ByCreator", Names: []string{"creator", "token_name"}},
 		},
-		Factory:       &domain.TokenCreationDataFactory{},
+		Factory:       &obj.TokenCreationDataFactory{},
 		BaseKeyPrefix: "tokencreation",
 	}}
 }
 
 func (repo *_TokenCreationRepo) CreateToken(stub shim.ChaincodeStubInterface, tokenName string, maxAmount int64,
 	creator, issuer string) error {
-	tokenCreation := &domain.TokenCreation{
+	tokenCreation := &obj.TokenCreation{
 		TokenName:     tokenName,
 		MaxAmount:     maxAmount,
 		CurrentAmount: 0,
@@ -41,7 +41,7 @@ func (repo *_TokenCreationRepo) CreateToken(stub shim.ChaincodeStubInterface, to
 
 func (repo *_TokenCreationRepo) UpdateTokenIssueAmount(stub shim.ChaincodeStubInterface, userName, tokenName string,
 	tokenAmount int64) error {
-	tokenCreationPrimaryKey := domain.GetTokenCreationPrimaryKey(tokenName)
+	tokenCreationPrimaryKey := obj.GetTokenCreationPrimaryKey(tokenName)
 	token, err := repo.GetByPrimaryKey(stub, tokenCreationPrimaryKey)
 	if err != nil {
 		repo.Logger.Error(err.Error())
@@ -51,7 +51,7 @@ func (repo *_TokenCreationRepo) UpdateTokenIssueAmount(stub shim.ChaincodeStubIn
 		return errors.New("token not exist")
 	}
 
-	tokenEntity := token.(*domain.TokenCreation)
+	tokenEntity := token.(*obj.TokenCreation)
 	if tokenEntity.Issuer != userName {
 		return errors.New("token issue is not allowed")
 	}

@@ -1,0 +1,16 @@
+syntax = "proto3";
+package protos;
+
+message CommonRequest {
+    string requestId = 1;
+}
+
+message CommonResponse {
+    string StatusCode = 1;
+    CommonErrorResponse Error = 2;
+}
+
+message CommonErrorResponse {
+    string error_code = 1;
+    string error_message = 2;
+}
