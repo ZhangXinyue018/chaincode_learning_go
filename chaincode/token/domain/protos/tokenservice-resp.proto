@@ -2,7 +2,7 @@ syntax = "proto3";
 package protos;
 
 import "common.proto";
-import "obj/tokenbalance.proto";
+import "tokenbalance.proto";
 
 message PingResponse {
     CommonResponse CommonResponse = 1;

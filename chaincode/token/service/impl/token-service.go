@@ -117,7 +117,7 @@ func (service *TokenService) GetToken(stub shim.ChaincodeStubInterface, request 
 
 	return &protos.GetTokenResponse{
 		CommonResponse: resp.BuildSuccessCommonResponse(consts.RESPONSE_SUCCESS),
-		Result:         userBalance,
+		Result:         userBalance.ToProtoBufObj(),
 	}
 }
 
@@ -135,10 +135,14 @@ func (service *TokenService) PaginateTokenByUserName(stub shim.ChaincodeStubInte
 		}
 	}
 
+	finalResults := make([]*protos.TokenBalancePB, 0)
+	for _, result := range results{
+		finalResults = append(finalResults, result.ToProtoBufObj())
+	}
 	return &protos.PaginateTokenByUserNameResponse{
 		CommonResponse: resp.BuildSuccessCommonResponse(consts.RESPONSE_SUCCESS),
 		PageSize:       pageSize,
-		Results:        results,
+		Results:        finalResults,
 		BookMark:       newBookMark,
 	}
 }
@@ -157,10 +161,14 @@ func (service *TokenService) PaginateTokenByTokenName(stub shim.ChaincodeStubInt
 		}
 	}
 
+	finalResults := make([]*protos.TokenBalancePB, 0)
+	for _, result := range results{
+		finalResults = append(finalResults, result.ToProtoBufObj())
+	}
 	return &protos.PaginateTokenByTokenNameResponse{
 		CommonResponse: resp.BuildSuccessCommonResponse(consts.RESPONSE_SUCCESS),
 		PageSize:       pageSize,
-		Results:        results,
+		Results:        finalResults,
 		BookMark:       newBookMark,
 	}
 }

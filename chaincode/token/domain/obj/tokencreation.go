@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/chaincode_learning_go/chaincode/common"
 	"github.com/chaincode_learning_go/chaincode/lib"
-	"github.com/chaincode_learning_go/chaincode/token/domain/protos/obj"
+	"github.com/chaincode_learning_go/chaincode/token/domain/protos"
 	"strconv"
 )
 

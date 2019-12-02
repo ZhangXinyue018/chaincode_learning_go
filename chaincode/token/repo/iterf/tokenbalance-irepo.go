@@ -13,13 +13,11 @@ type ITokenBalanceRepository interface {
 
 	ListBalanceByUserName(stub shim.ChaincodeStubInterface, query []string) ([]*obj.TokenBalance, error)
 
-	PaginateBalanceByUserName(stub shim.ChaincodeStubInterface, query []string, pageSize int32,
-		bookMark string) ([]*obj.TokenBalance, string, error)
+	PaginateBalanceByUserName(stub shim.ChaincodeStubInterface, query []string, pageSize int32, bookMark string) ([]*obj.TokenBalance, string, error)
 
 	ListBalanceByTokenName(stub shim.ChaincodeStubInterface, query []string) ([]*obj.TokenBalance, error)
 
-	PaginateBalanceByTokenName(stub shim.ChaincodeStubInterface, query []string, pageSize int32,
-		bookMark string) ([]*obj.TokenBalance, string, error)
+	PaginateBalanceByTokenName(stub shim.ChaincodeStubInterface, query []string, pageSize int32, bookMark string) ([]*obj.TokenBalance, string, error)
 
 	AddBalance(stub shim.ChaincodeStubInterface, userName, tokenName string, amount int64) error
 

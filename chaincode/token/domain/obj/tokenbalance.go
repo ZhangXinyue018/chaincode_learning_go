@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/chaincode_learning_go/chaincode/common"
 	"github.com/chaincode_learning_go/chaincode/lib"
-	protos "github.com/chaincode_learning_go/chaincode/token/domain/protos/obj"
+	"github.com/chaincode_learning_go/chaincode/token/domain/protos"
 	"strconv"
 )
 
@@ -28,6 +28,11 @@ func (userToken *TokenBalance) ToMap() map[string]string {
 
 func (userToken *TokenBalance) GetPrimaryKey() string {
 	return GetTokenBalancePrimaryKey(userToken.UserName, userToken.TokenName)
+}
+
+func (userToken *TokenBalance) ToProtoBufObj() *protos.TokenBalancePB {
+	temp := protos.TokenBalancePB(*userToken)
+	return &temp
 }
 
 func (userToken *TokenBalance) AddBalance(amount int64) {

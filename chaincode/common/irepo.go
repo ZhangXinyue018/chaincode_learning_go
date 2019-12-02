@@ -9,8 +9,7 @@ type IBaseRepo interface {
 
 	ListByIndexKey(stub shim.ChaincodeStubInterface, indexKey IndexSearchKey) ([]Data, error)
 
-	PaginateByIndexKey(stub shim.ChaincodeStubInterface, indexKey IndexSearchKey, pageSize int32,
-		bookMark string) (*PaginationResponse, error)
+	PaginateByIndexKey(stub shim.ChaincodeStubInterface, indexKey IndexSearchKey, pageSize int32, bookMark string) ([]Data, string, error)
 
 	UpdateWithEntity(stub shim.ChaincodeStubInterface, originalEntity Data, entity Data) error
 
