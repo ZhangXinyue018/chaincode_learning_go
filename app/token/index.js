@@ -24,7 +24,7 @@ app.get('/get-token', async (req, res) => {
     var result = await service.GetToken(
         uuidv1(), req.query.userName, req.query.tokenName
     );
-    res.send(result);
+    res.send(result.toObject());
 });
 
 app.get('/pagination-token', async (req, res) => {
@@ -40,7 +40,7 @@ app.get('/pagination-token', async (req, res) => {
             req.query.bookMark ? req.query.bookMark : ""
         )
     }
-    res.send(result);
+    res.send(result.toObject());
 });
 
 app.get('/transfer-token', async (req, res) => {

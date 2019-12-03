@@ -2,6 +2,7 @@ package common
 
 import (
 	"fmt"
+	"github.com/chaincode_learning_go/chaincode/lib"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
@@ -128,6 +129,10 @@ func (repo *BaseRepo) listByIndexKey(stub shim.ChaincodeStubInterface, indexSear
 
 func (repo *BaseRepo) listByIndexKeyPagination(stub shim.ChaincodeStubInterface, indexSearchKey IndexSearchKey,
 	pageSize int32, bookMark string) ([]Data, string, error) {
+	//	TODO: this is a temp solution for bookmark
+	repo.Logger.Debug(repo.getIndexKeyPrefix())
+	repo.Logger.Debug(indexSearchKey.ToSearchKeyList())
+	bookMark = string(lib.StringToBytes(bookMark))
 	iterator, responseMeta, err := stub.GetStateByPartialCompositeKeyWithPagination(repo.getIndexKeyPrefix(),
 		indexSearchKey.ToSearchKeyList(), pageSize, bookMark)
 	defer iterator.Close()
@@ -152,7 +157,8 @@ func (repo *BaseRepo) listByIndexKeyPagination(stub shim.ChaincodeStubInterface,
 		repo.Logger.Debugf("append %s", result.ToString())
 		resultList = append(resultList, result)
 	}
-	return resultList, responseMeta.Bookmark, nil
+	// TODO: this is a temp solution for bookmark
+	return resultList, lib.ByteToString([]byte(responseMeta.Bookmark)), nil
 }
 
 func (repo *BaseRepo) delete(stub shim.ChaincodeStubInterface, key string) error {

@@ -11,6 +11,6 @@ message CommonResponse {
 }
 
 message CommonErrorResponse {
-    string error_code = 1;
-    string error_message = 2;
+    string ErrorCode = 1;
+    string ErrorMessage = 2;
 }

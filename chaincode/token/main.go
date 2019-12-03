@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/chaincode_learning_go/chaincode/lib"
 	"github.com/chaincode_learning_go/chaincode/token/domain/protos"
 	"github.com/chaincode_learning_go/chaincode/token/domain/resp"
 	_ "github.com/chaincode_learning_go/chaincode/token/repo"
@@ -9,8 +10,6 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	sc "github.com/hyperledger/fabric/protos/peer"
-	"strconv"
-	"strings"
 )
 
 var mainLogger = shim.NewLogger("main")
@@ -28,12 +27,7 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 	if len(args) <= 0 {
 		return shim.Error("arg not enough")
 	}
-	inputs := strings.Split(args[0], ",")
-	requestBytes := make([]byte, 0)
-	for _, input := range inputs{
-		inputv, _ := strconv.Atoi(input)
-		requestBytes = append(requestBytes, byte(inputv))
-	}
+	requestBytes := lib.StringToBytes(args[0])
 
 	switch function {
 	case "Ping":
