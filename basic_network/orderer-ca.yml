@@ -57,5 +57,6 @@ services:
         - /var/run/:/host/var/run/
         - ./../chaincode/:/opt/gopath/src/github.com/chaincode_learning_go/chaincode/
         - ./crypto-config/peerOrganizations/:/opt/gopath/
+        - ./../../golang:/opt/gopath/src/github.com/golang
     networks:
         - basic

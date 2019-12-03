@@ -9,6 +9,8 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	sc "github.com/hyperledger/fabric/protos/peer"
+	"strconv"
+	"strings"
 )
 
 var mainLogger = shim.NewLogger("main")
@@ -21,11 +23,20 @@ func (s *SmartContract) Init(APIstub shim.ChaincodeStubInterface) sc.Response {
 }
 
 func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response {
+	mainLogger.Debug("Hello request")
 	function, args := APIstub.GetFunctionAndParameters()
-	requestBytes := []byte(args[0])
+	if len(args) <= 0 {
+		return shim.Error("arg not enough")
+	}
+	inputs := strings.Split(args[0], ",")
+	requestBytes := make([]byte, 0)
+	for _, input := range inputs{
+		inputv, _ := strconv.Atoi(input)
+		requestBytes = append(requestBytes, byte(inputv))
+	}
+
 	switch function {
 	case "Ping":
-		mainLogger.Debugf("ping")
 		request := &protos.PingRequest{}
 		err := proto.Unmarshal(requestBytes, request)
 		if err != nil {
@@ -37,7 +48,11 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 		request := &protos.CreateTokenRequest{}
 		err := proto.Unmarshal(requestBytes, request)
 		if err != nil {
-			return shim.Error("non known")
+			mainLogger.Error(err.Error())
+			return shim.Error(err.Error())
+		}
+		if request.MaxAmount == 0 {
+			return shim.Error("not valid protobuf")
 		}
 		response := service.TokenService.CreateToken(APIstub, request)
 		return shim.Success(resp.ToResponseBytes(response))

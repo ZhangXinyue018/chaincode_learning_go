@@ -16,7 +16,7 @@ app.get('/create-token', async (req, res) => {
 });
 
 app.get('/ping', async (req, res) => {
-    var result = await service.Ping();
+    var result = await service.Ping(uuidv1());
     res.send(result);
 });
 
@@ -24,8 +24,7 @@ app.get('/get-token', async (req, res) => {
     var result = await service.GetToken(
         uuidv1(), req.query.userName, req.query.tokenName
     );
-    var strResult = new Buffer(result).toString('ascii');
-    res.send(strResult);
+    res.send(result);
 });
 
 app.get('/pagination-token', async (req, res) => {
@@ -41,8 +40,7 @@ app.get('/pagination-token', async (req, res) => {
             req.query.bookMark ? req.query.bookMark : ""
         )
     }
-    let strResult = new Buffer(result).toString('ascii');
-    res.send(strResult);
+    res.send(result);
 });
 
 app.get('/transfer-token', async (req, res) => {

@@ -13,6 +13,7 @@
     "express": "^4.17.1",
     "fabric-ca-client": "^1.4.4",
     "fabric-network": "^1.4.4",
+    "google-protobuf": "^3.11.0",
     "swagger-ui-express": "^4.1.2",
     "uuid": "^3.3.3"
   }

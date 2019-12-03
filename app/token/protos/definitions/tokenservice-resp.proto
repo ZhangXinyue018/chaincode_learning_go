@@ -1,0 +1,40 @@
+syntax = "proto3";
+package protos;
+
+import "common.proto";
+import "tokenbalance.proto";
+
+message PingResponse {
+    CommonResponse CommonResponse = 1;
+}
+
+message CreateTokenResponse {
+    CommonResponse CommonResponse = 1;
+}
+
+message IssueTokenResponse {
+    CommonResponse CommonResponse = 1;
+}
+
+message TransferTokenResponse {
+    CommonResponse CommonResponse = 1;
+}
+
+message GetTokenResponse {
+    CommonResponse CommonResponse = 1;
+    TokenBalancePB Result = 2;
+}
+
+message PaginateTokenByUserNameResponse {
+    CommonResponse CommonResponse = 1;
+    int32 PageSize = 2;
+    string BookMark = 3;
+    repeated TokenBalancePB Results = 4;
+}
+
+message PaginateTokenByTokenNameResponse {
+    CommonResponse CommonResponse = 1;
+    int32 PageSize = 2;
+    string BookMark = 3;
+    repeated TokenBalancePB Results = 4;
+}
