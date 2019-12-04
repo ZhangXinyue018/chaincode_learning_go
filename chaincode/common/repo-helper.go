@@ -130,8 +130,6 @@ func (repo *BaseRepo) listByIndexKey(stub shim.ChaincodeStubInterface, indexSear
 func (repo *BaseRepo) listByIndexKeyPagination(stub shim.ChaincodeStubInterface, indexSearchKey IndexSearchKey,
 	pageSize int32, bookMark string) ([]Data, string, error) {
 	//	TODO: this is a temp solution for bookmark
-	repo.Logger.Debug(repo.getIndexKeyPrefix())
-	repo.Logger.Debug(indexSearchKey.ToSearchKeyList())
 	bookMark = string(lib.StringToBytes(bookMark))
 	iterator, responseMeta, err := stub.GetStateByPartialCompositeKeyWithPagination(repo.getIndexKeyPrefix(),
 		indexSearchKey.ToSearchKeyList(), pageSize, bookMark)
@@ -145,7 +143,7 @@ func (repo *BaseRepo) listByIndexKeyPagination(stub shim.ChaincodeStubInterface,
 		if err != nil {
 			return nil, "", err
 		}
-
+		repo.Logger.Debug(response)
 		baseKeys = append(baseKeys, string(response.Value))
 	}
 	resultList := make([]Data, 0)

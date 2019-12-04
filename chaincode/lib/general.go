@@ -23,6 +23,9 @@ func FromJsonBytes(data []byte, entity interface{}) error {
 }
 
 func StringToBytes(str string) []byte {
+	if str == "" {
+		return []byte{}
+	}
 	inputs := strings.Split(str, ",")
 	requestBytes := make([]byte, 0)
 	for _, input := range inputs {
