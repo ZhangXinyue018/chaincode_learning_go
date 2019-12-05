@@ -2,7 +2,8 @@ syntax = "proto3";
 package protos;
 
 message CommonRequest {
-    string requestId = 1;
+//    todo: change to RequestId
+    string RequestId = 1;
 }
 
 message CommonResponse {

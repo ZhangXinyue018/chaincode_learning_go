@@ -191,7 +191,7 @@ proto.protos.CommonRequest.serializeBinaryToWriter = function(message, writer) {
 
 
 /**
- * optional string requestId = 1;
+ * optional string RequestId = 1;
  * @return {string}
  */
 proto.protos.CommonRequest.prototype.getRequestid = function() {
@@ -421,8 +421,8 @@ proto.protos.CommonErrorResponse.prototype.toObject = function(opt_includeInstan
  */
 proto.protos.CommonErrorResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-    errorCode: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    errorMessage: jspb.Message.getFieldWithDefault(msg, 2, "")
+    errorcode: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    errormessage: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
   if (includeInstance) {
@@ -461,11 +461,11 @@ proto.protos.CommonErrorResponse.deserializeBinaryFromReader = function(msg, rea
     switch (field) {
     case 1:
       var value = /** @type {string} */ (reader.readString());
-      msg.setErrorCode(value);
+      msg.setErrorcode(value);
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
-      msg.setErrorMessage(value);
+      msg.setErrormessage(value);
       break;
     default:
       reader.skipField();
@@ -496,14 +496,14 @@ proto.protos.CommonErrorResponse.prototype.serializeBinary = function() {
  */
 proto.protos.CommonErrorResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getErrorCode();
+  f = message.getErrorcode();
   if (f.length > 0) {
     writer.writeString(
       1,
       f
     );
   }
-  f = message.getErrorMessage();
+  f = message.getErrormessage();
   if (f.length > 0) {
     writer.writeString(
       2,
@@ -514,10 +514,10 @@ proto.protos.CommonErrorResponse.serializeBinaryToWriter = function(message, wri
 
 
 /**
- * optional string error_code = 1;
+ * optional string ErrorCode = 1;
  * @return {string}
  */
-proto.protos.CommonErrorResponse.prototype.getErrorCode = function() {
+proto.protos.CommonErrorResponse.prototype.getErrorcode = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
@@ -526,16 +526,16 @@ proto.protos.CommonErrorResponse.prototype.getErrorCode = function() {
  * @param {string} value
  * @return {!proto.protos.CommonErrorResponse} returns this
  */
-proto.protos.CommonErrorResponse.prototype.setErrorCode = function(value) {
+proto.protos.CommonErrorResponse.prototype.setErrorcode = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
 };
 
 
 /**
- * optional string error_message = 2;
+ * optional string ErrorMessage = 2;
  * @return {string}
  */
-proto.protos.CommonErrorResponse.prototype.getErrorMessage = function() {
+proto.protos.CommonErrorResponse.prototype.getErrormessage = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
@@ -544,7 +544,7 @@ proto.protos.CommonErrorResponse.prototype.getErrorMessage = function() {
  * @param {string} value
  * @return {!proto.protos.CommonErrorResponse} returns this
  */
-proto.protos.CommonErrorResponse.prototype.setErrorMessage = function(value) {
+proto.protos.CommonErrorResponse.prototype.setErrormessage = function(value) {
   return jspb.Message.setProto3StringField(this, 2, value);
 };
 
