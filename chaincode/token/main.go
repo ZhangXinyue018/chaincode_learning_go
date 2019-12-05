@@ -90,6 +90,22 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 		}
 		response := service.TokenService.PaginateTokenByTokenName(APIstub, request)
 		return shim.Success(resp.ToResponseBytes(response))
+	case "PaginateTokenLogByFromUser":
+		request := &protos.PaginateTokenLogByFromUserNameRequest{}
+		err := proto.Unmarshal(requestBytes, request)
+		if err != nil {
+			return shim.Error("non known")
+		}
+		response := service.TokenLogService.PaginateTokenLogByFromUserName(APIstub, request)
+		return shim.Success(resp.ToResponseBytes(response))
+	case "PaginateTokenLogByToUser":
+		request := &protos.PaginateTokenLogByToUserNameRequest{}
+		err := proto.Unmarshal(requestBytes, request)
+		if err != nil {
+			return shim.Error("non known")
+		}
+		response := service.TokenLogService.PaginateTokenLogByToUserName(APIstub, request)
+		return shim.Success(resp.ToResponseBytes(response))
 	}
 
 	return shim.Error("not supported")

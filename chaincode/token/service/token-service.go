@@ -7,11 +7,16 @@ import (
 )
 
 var TokenService iterf.ITokenService
+var TokenLogService iterf.ITokenLogService
 
 func init() {
 	TokenService = &impl.TokenService{
 		TokenCreationRepository: repo.TokenCreationRepository,
 		TokenBalanceRepository:  repo.TokenBalanceRepository,
 		TokenLogRepository:      repo.TokenLogRepository,
+	}
+
+	TokenLogService = &impl.TokenLogService{
+		TokenLogRepository: repo.TokenLogRepository,
 	}
 }

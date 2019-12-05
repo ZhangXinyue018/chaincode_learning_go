@@ -221,6 +221,42 @@
           }
         }
       }
+    },
+    "/pagination-log": {
+      "get": {
+        "tags": [
+          "test"
+        ],
+        "operationId": "paginateLog",
+        "parameters": [
+          {
+            "name": "fromUserName",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "toUserName",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "bookMark",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ok"
+          }
+        }
+      }
     }
   }
 }

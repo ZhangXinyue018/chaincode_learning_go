@@ -26,6 +26,7 @@ func (tokenlog *TokenLog) ToMap() map[string]string {
 		"token_name":     tokenlog.TokenName,
 		"token_amount":   strconv.FormatInt(tokenlog.TokenAmount, 10),
 		"comment":        tokenlog.Comment,
+		"timestamp":      strconv.FormatInt(tokenlog.Timestamp, 10),
 	}
 }
 
@@ -35,6 +36,11 @@ func (tokenlog *TokenLog) GetPrimaryKey() string {
 
 func GetTokenLogPrimaryKey(logId string) string {
 	return fmt.Sprintf("%s", logId)
+}
+
+func (tokenlog *TokenLog) ToProtoBufObj() *protos.TokenLogPB {
+	temp := protos.TokenLogPB(*tokenlog)
+	return &temp
 }
 
 type TokenLogDataFactory struct {

@@ -43,6 +43,22 @@ app.get('/pagination-token', async (req, res) => {
     res.send(result.toObject());
 });
 
+app.get('/pagination-log', async (req, res) => {
+    let result;
+    if (req.query.fromUserName) {
+        result = await service.PaginateTokenLogByFromUser(
+            uuidv1(), req.query.fromUserName, req.query.pageSize,
+            req.query.bookMark ? req.query.bookMark : ""
+        );
+    } else {
+        result = await service.PaginateTokenLogByToUser(
+            uuidv1(), req.query.toUserName, req.query.pageSize,
+            req.query.bookMark ? req.query.bookMark : ""
+        )
+    }
+    res.send(result.toObject());
+});
+
 app.get('/transfer-token', async (req, res) => {
     var result = await service.TransferToken(
         uuidv1(), req.query.fromUserName, req.query.toUserName,

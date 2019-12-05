@@ -52,7 +52,7 @@ func (service *TokenService) IssueToken(stub shim.ChaincodeStubInterface, reques
 		}
 	}
 
-	err = service.TokenLogRepository.CreateTokenLog(stub, requestId, userName, tokenName, tokenAmount)
+	err = service.TokenLogRepository.CreateTokenLog(stub, requestId, "0", userName, tokenName, tokenAmount)
 
 	if err != nil {
 		return &protos.IssueTokenResponse{
@@ -86,7 +86,7 @@ func (service *TokenService) TransferToken(stub shim.ChaincodeStubInterface, req
 		}
 	}
 
-	err = service.TokenLogRepository.CreateTokenLog(stub, requestId, fromUserName, tokenName, -tokenAmount)
+	err = service.TokenLogRepository.CreateTokenLog(stub, requestId, fromUserName, toUserName, tokenName, -tokenAmount)
 
 	if err != nil {
 		return &protos.TransferTokenResponse{
@@ -94,7 +94,7 @@ func (service *TokenService) TransferToken(stub shim.ChaincodeStubInterface, req
 		}
 	}
 
-	err = service.TokenLogRepository.CreateTokenLog(stub, requestId, toUserName, tokenName, tokenAmount)
+	err = service.TokenLogRepository.CreateTokenLog(stub, requestId, fromUserName, toUserName, tokenName, tokenAmount)
 
 	if err != nil {
 		return &protos.TransferTokenResponse{
@@ -136,7 +136,7 @@ func (service *TokenService) PaginateTokenByUserName(stub shim.ChaincodeStubInte
 	}
 
 	finalResults := make([]*protos.TokenBalancePB, 0)
-	for _, result := range results{
+	for _, result := range results {
 		finalResults = append(finalResults, result.ToProtoBufObj())
 	}
 	return &protos.PaginateTokenByUserNameResponse{
@@ -162,7 +162,7 @@ func (service *TokenService) PaginateTokenByTokenName(stub shim.ChaincodeStubInt
 	}
 
 	finalResults := make([]*protos.TokenBalancePB, 0)
-	for _, result := range results{
+	for _, result := range results {
 		finalResults = append(finalResults, result.ToProtoBufObj())
 	}
 	return &protos.PaginateTokenByTokenNameResponse{

@@ -114,6 +114,36 @@ async function PaginateTokenBalanceByToken(requestId, tokenName, pageSize, bookM
     }
 }
 
+async function PaginateTokenLogByFromUser(requestId, fromUserName, pageSize, bookMark) {
+    try {
+        var paginationRequest = new request.PaginateTokenLogByFromUserNameRequest();
+        paginationRequest.setCommonrequest(new request.CommonRequest([requestId]));
+        paginationRequest.setFromusername(fromUserName);
+        paginationRequest.setPagesize(pageSize);
+        paginationRequest.setBookmark(bookMark);
+        var byte = paginationRequest.serializeBinary();
+        var ccresp = await simpleContractOperator.SubmitTransaction('PaginateTokenLogByFromUser', byte.toString());
+        return response.PaginateTokenLogByFromUserNameResponse.deserializeBinary(Uint8Array.from(ccresp));
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function PaginateTokenLogByToUser(requestId, toUserName, pageSize, bookMark) {
+    try {
+        var paginationRequest = new request.PaginateTokenLogByToUserNameRequest();
+        paginationRequest.setCommonrequest(new request.CommonRequest([requestId]));
+        paginationRequest.setTousername(toUserName);
+        paginationRequest.setPagesize(pageSize);
+        paginationRequest.setBookmark(bookMark);
+        var byte = paginationRequest.serializeBinary();
+        var ccresp = await simpleContractOperator.SubmitTransaction('PaginateTokenLogByToUser', byte.toString());
+        return response.PaginateTokenLogByToUserNameResponse.deserializeBinary(Uint8Array.from(ccresp));
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 module.exports = {
     Ping: Ping,
     CreateToken: CreateToken,
@@ -121,5 +151,7 @@ module.exports = {
     GetToken: GetToken,
     PaginateTokenBalanceByUser: PaginateTokenBalanceByUser,
     PaginateTokenBalanceByToken: PaginateTokenBalanceByToken,
-    TransferToken: TransferToken
+    TransferToken: TransferToken,
+    PaginateTokenLogByFromUser: PaginateTokenLogByFromUser,
+    PaginateTokenLogByToUser: PaginateTokenLogByToUser
 };

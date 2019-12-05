@@ -3,6 +3,7 @@ package protos;
 
 import "common.proto";
 import "tokenbalance.proto";
+import "tokenlog.proto";
 
 message PingResponse {
     CommonResponse CommonResponse = 1;
@@ -37,4 +38,18 @@ message PaginateTokenByTokenNameResponse {
     int32 PageSize = 2;
     string BookMark = 3;
     repeated TokenBalancePB Results = 4;
+}
+
+message PaginateTokenLogByFromUserNameResponse {
+    CommonResponse CommonResponse = 1;
+    int32 PageSize = 2;
+    string BookMark = 3;
+    repeated TokenLogPB Results = 4;
+}
+
+message PaginateTokenLogByToUserNameResponse {
+    CommonResponse CommonResponse = 1;
+    int32 PageSize = 2;
+    string BookMark = 3;
+    repeated TokenLogPB Results = 4;
 }

@@ -8,4 +8,5 @@ message TokenLogPB {
     string TokenName = 4;
     int64 TokenAmount = 5;
     string Comment = 6;
+    int64 Timestamp = 7;
 }

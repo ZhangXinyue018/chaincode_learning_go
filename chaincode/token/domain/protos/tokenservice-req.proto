@@ -49,3 +49,17 @@ message PaginateTokenByTokenNameRequest {
     int32 PageSize = 3;
     string BookMark = 4;
 }
+
+message PaginateTokenLogByFromUserNameRequest {
+    CommonRequest CommonRequest = 1;
+    string FromUserName = 2;
+    int32 PageSize = 3;
+    string BookMark = 4;
+}
+
+message PaginateTokenLogByToUserNameRequest {
+    CommonRequest CommonRequest = 1;
+    string ToUserName = 2;
+    int32 PageSize = 3;
+    string BookMark = 4;
+}

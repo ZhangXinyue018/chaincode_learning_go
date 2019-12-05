@@ -71,7 +71,8 @@ proto.protos.TokenLogPB.toObject = function(includeInstance, msg) {
     tousername: jspb.Message.getFieldWithDefault(msg, 3, ""),
     tokenname: jspb.Message.getFieldWithDefault(msg, 4, ""),
     tokenamount: jspb.Message.getFieldWithDefault(msg, 5, 0),
-    comment: jspb.Message.getFieldWithDefault(msg, 6, "")
+    comment: jspb.Message.getFieldWithDefault(msg, 6, ""),
+    timestamp: jspb.Message.getFieldWithDefault(msg, 7, 0)
   };
 
   if (includeInstance) {
@@ -131,6 +132,10 @@ proto.protos.TokenLogPB.deserializeBinaryFromReader = function(msg, reader) {
     case 6:
       var value = /** @type {string} */ (reader.readString());
       msg.setComment(value);
+      break;
+    case 7:
+      var value = /** @type {number} */ (reader.readInt64());
+      msg.setTimestamp(value);
       break;
     default:
       reader.skipField();
@@ -200,6 +205,13 @@ proto.protos.TokenLogPB.serializeBinaryToWriter = function(message, writer) {
   if (f.length > 0) {
     writer.writeString(
       6,
+      f
+    );
+  }
+  f = message.getTimestamp();
+  if (f !== 0) {
+    writer.writeInt64(
+      7,
       f
     );
   }
@@ -311,6 +323,24 @@ proto.protos.TokenLogPB.prototype.getComment = function() {
  */
 proto.protos.TokenLogPB.prototype.setComment = function(value) {
   return jspb.Message.setProto3StringField(this, 6, value);
+};
+
+
+/**
+ * optional int64 Timestamp = 7;
+ * @return {number}
+ */
+proto.protos.TokenLogPB.prototype.getTimestamp = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 7, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.protos.TokenLogPB} returns this
+ */
+proto.protos.TokenLogPB.prototype.setTimestamp = function(value) {
+  return jspb.Message.setProto3IntField(this, 7, value);
 };
 
 
