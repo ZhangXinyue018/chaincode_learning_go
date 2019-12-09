@@ -12,15 +12,13 @@ var TokenLogService iterf.ITokenLogService
 var once sync.Once
 
 func init() {
-	once.Do(func() {
-		TokenService = &impl.TokenService{
-			TokenCreationRepository: repo.TokenCreationRepository,
-			TokenBalanceRepository:  repo.TokenBalanceRepository,
-			TokenLogRepository:      repo.TokenLogRepository,
-		}
+	TokenService = &impl.TokenService{
+		TokenCreationRepository: repo.TokenCreationRepository,
+		TokenBalanceRepository:  repo.TokenBalanceRepository,
+		TokenLogRepository:      repo.TokenLogRepository,
+	}
 
-		TokenLogService = &impl.TokenLogService{
-			TokenLogRepository: repo.TokenLogRepository,
-		}
-	})
+	TokenLogService = &impl.TokenLogService{
+		TokenLogRepository: repo.TokenLogRepository,
+	}
 }
